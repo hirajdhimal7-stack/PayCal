@@ -4,144 +4,224 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Hiraj — Pay Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f0f13;--s1:#18181f;--s2:#22222c;--border:#2e2e3a;--text:#f0f0f5;--sub:#7a7a92;--lhsc:#4f9cf9;--lhscl:#1a2d45;--craig:#f97b4f;--craigl:#3a1f12;--green:#34d399;--greenl:#0d3326;--red:#f87171;--r:14px;--rs:10px}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:72px}
-.topbar{background:var(--s1);border-bottom:1px solid var(--border);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar-title{font-size:16px;font-weight:600}
-.topbar-sub{font-size:11px;color:var(--sub);margin-top:2px}
-.top-total{font-size:18px;font-weight:700;color:var(--green)}
-.page{display:none;padding:14px}
+:root{
+  --bg:#09090f;--s1:#111118;--s2:#1a1a24;--s3:#22222f;
+  --border:#2a2a38;--border2:#333345;
+  --text:#f0f0f8;--sub:#6b6b88;--muted:#3e3e55;
+  --lhsc:#5b8def;--lhscl:#131d35;--lhscb:#1e2d50;
+  --craig:#f07840;--craigl:#2a1508;--craigb:#3d1e08;
+  --green:#2dd4a0;--greenl:#0a2e22;
+  --red:#f16b6b;--redl:#2e0f0f;
+  --amber:#f5b944;--amberl:#2e2008;
+  --r:16px;--rs:12px;--rsm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:76px;overscroll-behavior:none}
+
+/* ── TOPBAR ── */
+.topbar{background:rgba(9,9,15,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 18px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.tb-left{display:flex;flex-direction:column}
+.tb-title{font-size:15px;font-weight:700;letter-spacing:-0.3px}
+.tb-date{font-size:11px;color:var(--sub);margin-top:1px}
+.tb-right{text-align:right}
+.tb-label{font-size:10px;color:var(--sub);letter-spacing:0.04em;text-transform:uppercase}
+.tb-amount{font-size:20px;font-weight:800;color:var(--green);letter-spacing:-0.5px;font-variant-numeric:tabular-nums}
+
+/* ── PAGES ── */
+.page{display:none;padding:16px;animation:fadeIn 0.2s ease}
 .page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
-/* PAY CARDS */
-.pay-card{border-radius:var(--r);padding:16px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.pay-card.lhsc{background:var(--lhscl);border:1px solid #2a4a6e}
-.pay-card.craig{background:var(--craigl);border:1px solid #5a3020}
-.pc-name{font-size:13px;font-weight:700;margin-bottom:3px}
-.pc-name.lhsc{color:var(--lhsc)}.pc-name.craig{color:var(--craig)}
-.pc-period{font-size:11px;color:var(--sub)}
-.pc-payday{font-size:11px;color:var(--sub);margin-top:2px}
-.pc-countdown{font-size:12px;font-weight:600;margin-top:5px}
-.pc-countdown.soon{color:var(--green)}.pc-countdown.later{color:var(--sub)}
-.pc-right{text-align:right;flex-shrink:0}
-.pc-gross{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
-.pc-gross.lhsc{color:var(--lhsc)}.pc-gross.craig{color:var(--craig)}
-.pc-hrs{font-size:11px;color:var(--sub);margin-top:3px}
-.pc-period-num{font-size:10px;color:var(--sub);margin-top:2px}
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(17,17,24,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;height:68px;padding-bottom:env(safe-area-inset-bottom);z-index:200}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;cursor:pointer;color:var(--sub);font-size:10px;font-weight:600;font-family:'Inter',sans-serif;letter-spacing:0.02em;transition:color 0.15s;padding:8px 4px}
+.bnav-btn .bi{font-size:22px;transition:transform 0.15s}
+.bnav-btn.active{color:var(--lhsc)}
+.bnav-btn.active .bi{transform:scale(1.1)}
 
-/* COMBINED */
-.combined-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
-.comb-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
-.comb-row:last-child{border-bottom:none}
-.comb-label{font-size:12px;color:var(--sub)}
-.comb-val{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
-.comb-big{font-size:26px;font-weight:700;color:var(--green)}
+/* ── JOB CARDS (home) ── */
+.job-hero{border-radius:var(--r);padding:18px;margin-bottom:10px;position:relative;overflow:hidden}
+.job-hero.lhsc{background:linear-gradient(135deg,var(--lhscl) 0%,var(--lhscb) 100%);border:1px solid #1e3360}
+.job-hero.craig{background:linear-gradient(135deg,var(--craigl) 0%,var(--craigb) 100%);border:1px solid #4a2510}
+.jh-glow{position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;opacity:0.12;filter:blur(24px)}
+.jh-glow.lhsc{background:var(--lhsc)}.jh-glow.craig{background:var(--craig)}
+.jh-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.jh-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em}
+.jh-name.lhsc{color:var(--lhsc)}.jh-name.craig{color:var(--craig)}
+.jh-period{font-size:11px;color:var(--sub);margin-top:3px}
+.jh-rate{font-size:11px;color:var(--sub);margin-top:2px}
+.jh-gross{font-size:32px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1}
+.jh-gross.lhsc{color:var(--lhsc)}.jh-gross.craig{color:var(--craig)}
+.jh-hrs{font-size:12px;color:var(--sub);margin-top:4px}
+.jh-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
+.jh-countdown{font-size:12px;font-weight:600}
+.jh-countdown.soon{color:var(--green)}.jh-countdown.close{color:var(--amber)}.jh-countdown.later{color:var(--sub)}
+.jh-payday{font-size:11px;color:var(--sub)}
+.progress-wrap{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:8px;overflow:hidden}
+.progress-bar{height:100%;border-radius:2px;transition:width 0.6s ease}
+.progress-bar.lhsc{background:var(--lhsc)}.progress-bar.craig{background:var(--craig)}
 
-/* LOG */
-.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.section-title{font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:0.07em}
-.pills{display:flex;gap:6px}
-.pill-btn{font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;cursor:pointer;border:none;font-family:'Inter',sans-serif}
-.pill-btn.lhsc{background:var(--lhscl);color:var(--lhsc)}.pill-btn.craig{background:var(--craigl);color:var(--craig)}
-.pill-btn.active.lhsc{background:var(--lhsc);color:white}.pill-btn.active.craig{background:var(--craig);color:white}
+/* ── COMBINED CARD ── */
+.combined-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:10px}
+.cc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);margin-bottom:14px}
+.cc-big{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cc-gross-label{font-size:13px;color:var(--sub)}
+.cc-gross-val{font-size:28px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-0.5px}
+.cc-rows{display:flex;flex-direction:column;gap:8px}
+.cc-row{display:flex;justify-content:space-between;align-items:center}
+.cc-row-label{font-size:12px;color:var(--sub)}
+.cc-row-val{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.cc-divider{height:1px;background:var(--border);margin:8px 0}
+
+/* ── LOG ── */
+.job-toggle{display:flex;background:var(--s2);border-radius:var(--r);padding:4px;gap:4px;margin-bottom:14px}
+.jt-btn{flex:1;padding:10px;border-radius:var(--rs);border:none;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;background:none;color:var(--sub);transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.jt-btn.active.lhsc{background:var(--lhscb);color:var(--lhsc)}
+.jt-btn.active.craig{background:var(--craigb);color:var(--craig)}
+.jt-dot{width:7px;height:7px;border-radius:50%}
+.jt-dot.lhsc{background:var(--lhsc)}.jt-dot.craig{background:var(--craig)}
 
 .log-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
-.log-hdr{display:grid;grid-template-columns:80px 1fr 60px 72px 32px;gap:6px;padding:8px 12px;background:var(--s2);border-bottom:1px solid var(--border)}
+.log-hdr{display:grid;grid-template-columns:78px 1fr 54px 70px 64px;gap:4px;padding:9px 14px;background:var(--s2);border-bottom:1px solid var(--border)}
 .log-hdr span{font-size:10px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:0.05em}
 .log-hdr span:nth-child(3),.log-hdr span:nth-child(4){text-align:right}
-.shift-row{display:grid;grid-template-columns:80px 1fr 60px 72px 32px;gap:6px;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center}
+.log-hdr span:nth-child(5){text-align:center}
+.shift-row{display:grid;grid-template-columns:78px 1fr 54px 70px 64px;gap:4px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;transition:background 0.1s}
 .shift-row:last-child{border-bottom:none}
+.shift-row:hover{background:var(--s2)}
 .sr-date{font-size:12px;font-weight:500}
 .sr-type{font-size:11px;color:var(--sub)}
 .sr-hrs{font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
-.sr-pay{font-size:12px;font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
-.sr-del{background:none;border:none;color:var(--sub);cursor:pointer;font-size:16px;text-align:center;padding:2px;border-radius:6px}
-.sr-del:hover{color:var(--red)}
-.log-empty{padding:22px;text-align:center;color:var(--sub);font-size:13px}
-.log-footer{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:10px 12px;background:var(--s2);border-top:1px solid var(--border);gap:4px}
+.sr-pay{font-size:12px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.sr-actions{display:flex;gap:4px;justify-content:center}
+.icon-btn{background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;font-size:14px;line-height:1;transition:background 0.1s}
+.icon-btn.edit:hover{background:var(--lhscb);color:var(--lhsc)}
+.icon-btn.del:hover{background:var(--redl);color:var(--red)}
+.log-empty{padding:28px;text-align:center;color:var(--sub);font-size:13px}
+.log-footer{display:grid;grid-template-columns:repeat(4,1fr);padding:10px 14px;background:var(--s2);border-top:1px solid var(--border);gap:4px}
 .lf-col{text-align:center}
 .lf-label{font-size:10px;color:var(--sub);margin-bottom:3px}
-.lf-val{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.lf-val{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
 
-/* ADD FORM */
-.add-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
-.add-card-title{font-size:13px;font-weight:600;margin-bottom:12px}
-.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.field label{font-size:11px;font-weight:500;color:var(--sub);margin-bottom:5px;display:block}
-.field input,.field select{width:100%;height:42px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:14px;font-family:'Inter',sans-serif;padding:0 12px;background:var(--s2);color:var(--text);outline:none}
+/* ── ADD / EDIT FORM ── */
+.form-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.form-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.form-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em}
+.form-badge.lhsc{background:var(--lhscb);color:var(--lhsc)}.form-badge.craig{background:var(--craigb);color:var(--craig)}
+.form-badge.edit{background:var(--amberl);color:var(--amber)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.field label{font-size:11px;font-weight:600;color:var(--sub);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:0.04em}
+.field input,.field select{width:100%;height:44px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:15px;font-family:'Inter',sans-serif;padding:0 12px;background:var(--s2);color:var(--text);outline:none;transition:border-color 0.15s;-webkit-appearance:none}
 .field input:focus,.field select:focus{border-color:var(--lhsc)}
-.add-btn{width:100%;height:44px;border-radius:var(--rs);border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer}
-.add-btn.lhsc{background:var(--lhsc);color:white}.add-btn.craig{background:var(--craig);color:white}
+.btn-row{display:flex;gap:8px}
+.form-btn{flex:1;height:46px;border-radius:var(--rs);border:none;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s}
+.form-btn:active{opacity:0.8}
+.form-btn.primary.lhsc{background:var(--lhsc);color:white}
+.form-btn.primary.craig{background:var(--craig);color:white}
+.form-btn.primary.edit{background:var(--amber);color:#000}
+.form-btn.cancel{background:var(--s3);color:var(--sub)}
 
-/* HISTORY */
-.period-block{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
-.period-hdr{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border-bottom:1px solid var(--border)}
-.period-hdr-left .ph-name{font-size:13px;font-weight:600}
-.period-hdr-left .ph-dates{font-size:11px;color:var(--sub);margin-top:2px}
-.period-hdr-right{text-align:right}
-.ph-gross{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+/* ── HISTORY ── */
+.hist-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.hist-tab{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);background:var(--s1);color:var(--sub);transition:all 0.15s;font-family:'Inter',sans-serif}
+.hist-tab.active{background:var(--s3);color:var(--text);border-color:var(--border2)}
+
+.period-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.period-hdr{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:12px}
+.period-hdr:hover{background:var(--s2)}
+.ph-left .ph-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.ph-left .ph-dates{font-size:12px;color:var(--sub)}
+.ph-left .ph-payday{font-size:11px;color:var(--sub);margin-top:2px}
+.ph-right{text-align:right;flex-shrink:0}
+.ph-gross{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
 .ph-gross.lhsc{color:var(--lhsc)}.ph-gross.craig{color:var(--craig)}
-.ph-hrs{font-size:11px;color:var(--sub);margin-top:2px}
-.period-body{display:none;padding:10px 14px}
+.ph-hrs{font-size:11px;color:var(--sub);margin-top:3px}
+.period-body{border-top:1px solid var(--border);padding:12px 16px;display:none}
 .period-body.open{display:block}
+.period-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.psg-item{background:var(--s2);border-radius:var(--rsm);padding:10px;text-align:center}
+.psg-label{font-size:10px;color:var(--sub);margin-bottom:4px}
+.psg-val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.mini-shift{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.mini-shift:last-child{border-bottom:none}
+.ms-left{color:var(--sub)}
+.ms-pay{font-weight:600;font-variant-numeric:tabular-nums}
+.chevron{font-size:12px;color:var(--sub);transition:transform 0.2s}
+.chevron.open{transform:rotate(90deg)}
 
-/* SETTINGS */
-.set-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
-.set-job-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
-.set-job-title.lhsc{color:var(--lhsc)}.set-job-title.craig{color:var(--craig)}
-.set-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.sc-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--sub);margin-bottom:8px}
+.sc-val{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-0.5px}
+.sc-sub{font-size:11px;color:var(--sub);margin-top:4px}
+.bar-chart{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.bc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--sub);margin-bottom:14px}
+.bc-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bc-row:last-child{margin-bottom:0}
+.bc-label{font-size:11px;width:65px;flex-shrink:0;color:var(--sub)}
+.bc-bar-wrap{flex:1;height:8px;background:var(--s2);border-radius:4px;overflow:hidden}
+.bc-bar{height:100%;border-radius:4px;transition:width 0.6s ease}
+.bc-val{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;width:58px;text-align:right;flex-shrink:0}
+
+/* ── SETTINGS ── */
+.set-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.set-job-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:12px}
+.set-job-title.lhsc{color:var(--lhsc)}.set-job-title.craig{color:var(--craig)}.set-job-title.general{color:var(--sub)}
+.set-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
 .set-row:last-child{border-bottom:none}
-.set-label{font-size:13px}
+.set-label{font-size:13px;font-weight:500}
 .set-sub{font-size:11px;color:var(--sub);margin-top:2px}
-.set-input{height:36px;width:120px;border:1.5px solid var(--border);border-radius:8px;background:var(--s2);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:0 10px;outline:none;text-align:right}
+.set-input{height:38px;width:110px;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--s2);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:0 10px;outline:none;text-align:right;-webkit-appearance:none}
 .set-input:focus{border-color:var(--lhsc)}
+.save-btn{width:100%;height:46px;border-radius:var(--rs);border:none;background:var(--lhsc);color:white;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-top:4px}
 
-/* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--border);display:flex;height:64px;padding-bottom:env(safe-area-inset-bottom);z-index:100}
-.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:var(--sub);font-size:10px;font-weight:500;font-family:'Inter',sans-serif}
-.bnav-btn .bi{font-size:20px}
-.bnav-btn.active{color:var(--lhsc)}
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;align-items:flex-end}
+.modal-overlay.open{display:flex}
+.modal{background:var(--s1);border-radius:24px 24px 0 0;padding:20px 18px 36px;width:100%;max-height:90vh;overflow-y:auto;border-top:1px solid var(--border)}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 
-.toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s1);border:1px solid var(--border);color:var(--text);padding:11px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:999;transition:transform 0.25s;pointer-events:none;white-space:nowrap}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s2);border:1px solid var(--border2);color:var(--text);padding:11px 20px;border-radius:14px;font-size:13px;font-weight:500;z-index:999;transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div>
-    <div class="topbar-title">Pay & Hours</div>
-    <div class="topbar-sub" id="topbar-date">—</div>
+  <div class="tb-left">
+    <div class="tb-title">Pay Tracker</div>
+    <div class="tb-date" id="tb-date">—</div>
   </div>
-  <div style="text-align:right">
-    <div style="font-size:10px;color:var(--sub)">combined this period</div>
-    <div class="top-total" id="top-total">$0.00</div>
+  <div class="tb-right">
+    <div class="tb-label">Combined this period</div>
+    <div class="tb-amount" id="tb-amount">$0.00</div>
   </div>
 </div>
 
 <!-- HOME -->
 <div class="page active" id="page-home">
-  <div id="lhsc-pay-card"></div>
-  <div id="craig-pay-card"></div>
+  <div id="lhsc-hero"></div>
+  <div id="craig-hero"></div>
   <div class="combined-card" id="combined-card"></div>
 </div>
 
 <!-- LOG -->
 <div class="page" id="page-log">
-  <div class="section-hdr">
-    <span class="section-title">Current period</span>
-    <div class="pills">
-      <button class="pill-btn lhsc active" id="pill-lhsc" onclick="switchJob('lhsc')">LHSC</button>
-      <button class="pill-btn craig" id="pill-craig" onclick="switchJob('craig')">Craigweil</button>
-    </div>
+  <div class="job-toggle">
+    <button class="jt-btn lhsc active" id="jt-lhsc" onclick="switchJob('lhsc')"><span class="jt-dot lhsc"></span>LHSC</button>
+    <button class="jt-btn craig" id="jt-craig" onclick="switchJob('craig')"><span class="jt-dot craig"></span>Craigweil</button>
   </div>
   <div id="log-lhsc">
     <div class="log-card">
-      <div class="log-hdr"><span>Date</span><span>Type</span><span>Hrs</span><span>Pay</span><span></span></div>
+      <div class="log-hdr"><span>Date</span><span>Type</span><span>Hrs</span><span>Pay</span><span>Edit</span></div>
       <div id="lhsc-rows"></div>
       <div class="log-footer">
         <div class="lf-col"><div class="lf-label">Hours</div><div class="lf-val" id="lf-lhsc-hrs">0.00</div></div>
@@ -150,8 +230,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
         <div class="lf-col"><div class="lf-label">Gross</div><div class="lf-val" style="color:var(--lhsc)" id="lf-lhsc-gross">$0</div></div>
       </div>
     </div>
-    <div class="add-card">
-      <div class="add-card-title">Add LHSC shift</div>
+    <div class="form-card" id="lhsc-form-card">
+      <div class="form-title"><span id="lhsc-form-title">Add shift</span><span class="form-badge lhsc">LHSC</span><span class="form-badge edit" id="lhsc-edit-badge" style="display:none">Editing</span></div>
       <div class="f2">
         <div class="field"><label>Date</label><input type="date" id="lhsc-date"></div>
         <div class="field"><label>Type</label>
@@ -164,14 +244,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
           </select>
         </div>
         <div class="field"><label>Hours</label><input type="number" id="lhsc-hrs" placeholder="7.5" step="0.25" inputmode="decimal"></div>
-        <div class="field"><label>Extra ($)</label><input type="number" id="lhsc-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
+        <div class="field"><label>Extra pay ($)</label><input type="number" id="lhsc-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
       </div>
-      <button class="add-btn lhsc" onclick="addShift('lhsc')">+ Add shift</button>
+      <div class="btn-row">
+        <button class="form-btn cancel" id="lhsc-cancel-btn" onclick="cancelEdit('lhsc')" style="display:none">Cancel</button>
+        <button class="form-btn primary lhsc" id="lhsc-submit-btn" onclick="submitShift('lhsc')">+ Add shift</button>
+      </div>
     </div>
   </div>
   <div id="log-craig" style="display:none">
     <div class="log-card">
-      <div class="log-hdr"><span>Date</span><span>Type</span><span>Hrs</span><span>Pay</span><span></span></div>
+      <div class="log-hdr"><span>Date</span><span>Type</span><span>Hrs</span><span>Pay</span><span>Edit</span></div>
       <div id="craig-rows"></div>
       <div class="log-footer">
         <div class="lf-col"><div class="lf-label">Hours</div><div class="lf-val" id="lf-craig-hrs">0.00</div></div>
@@ -180,8 +263,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
         <div class="lf-col"><div class="lf-label">Gross</div><div class="lf-val" style="color:var(--craig)" id="lf-craig-gross">$0</div></div>
       </div>
     </div>
-    <div class="add-card">
-      <div class="add-card-title">Add Craigweil shift</div>
+    <div class="form-card" id="craig-form-card">
+      <div class="form-title"><span id="craig-form-title">Add shift</span><span class="form-badge craig">Craigweil</span><span class="form-badge edit" id="craig-edit-badge" style="display:none">Editing</span></div>
       <div class="f2">
         <div class="field"><label>Date</label><input type="date" id="craig-date"></div>
         <div class="field"><label>Type</label>
@@ -194,39 +277,54 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
           </select>
         </div>
         <div class="field"><label>Hours</label><input type="number" id="craig-hrs" placeholder="7.5" step="0.25" inputmode="decimal"></div>
-        <div class="field"><label>Extra ($)</label><input type="number" id="craig-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
+        <div class="field"><label>Extra pay ($)</label><input type="number" id="craig-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
       </div>
-      <button class="add-btn craig" onclick="addShift('craig')">+ Add shift</button>
+      <div class="btn-row">
+        <button class="form-btn cancel" id="craig-cancel-btn" onclick="cancelEdit('craig')" style="display:none">Cancel</button>
+        <button class="form-btn primary craig" id="craig-submit-btn" onclick="submitShift('craig')">+ Add shift</button>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- HISTORY -->
 <div class="page" id="page-history">
-  <div class="section-hdr"><span class="section-title">Past periods</span></div>
+  <div class="hist-tabs">
+    <button class="hist-tab active" onclick="filterHistory('all',this)">All</button>
+    <button class="hist-tab" onclick="filterHistory('lhsc',this)">LHSC</button>
+    <button class="hist-tab" onclick="filterHistory('craig',this)">Craigweil</button>
+  </div>
   <div id="history-content"></div>
+</div>
+
+<!-- STATS -->
+<div class="page" id="page-stats">
+  <div class="stats-grid" id="stats-grid"></div>
+  <div class="bar-chart" id="pay-chart"></div>
+  <div class="bar-chart" id="hrs-chart"></div>
 </div>
 
 <!-- SETTINGS -->
 <div class="page" id="page-settings">
   <div class="set-card">
-    <div class="set-job-title lhsc">LHSC</div>
-    <div class="set-row"><div><div class="set-label">Hourly rate</div></div><input class="set-input" type="number" id="s-lhsc-rate" value="27.01" step="0.01" onchange="saveSettings()"></div>
-    <div class="set-row"><div><div class="set-label">First period start</div><div class="set-sub">Anchor date — app auto-rolls from here</div></div><input class="set-input" type="date" id="s-lhsc-anchor" onchange="saveSettings()"></div>
-    <div class="set-row"><div><div class="set-label">Pay day offset</div><div class="set-sub">Days after period ends until pay day</div></div><input class="set-input" type="number" id="s-lhsc-offset" value="6" onchange="saveSettings()"></div>
+    <div class="set-job-title lhsc">● LHSC</div>
+    <div class="set-row"><div><div class="set-label">Hourly rate</div></div><input class="set-input" type="number" id="s-lhsc-rate" value="27.01" step="0.01"></div>
+    <div class="set-row"><div><div class="set-label">Anchor start date</div><div class="set-sub">First day of your first period</div></div><input class="set-input" type="date" id="s-lhsc-anchor"></div>
+    <div class="set-row"><div><div class="set-label">Pay day offset (days)</div><div class="set-sub">Days after period ends → pay day</div></div><input class="set-input" type="number" id="s-lhsc-offset" value="6"></div>
   </div>
   <div class="set-card">
-    <div class="set-job-title craig">Craigweil Gardens</div>
-    <div class="set-row"><div><div class="set-label">Hourly rate</div></div><input class="set-input" type="number" id="s-craig-rate" value="26.00" step="0.01" onchange="saveSettings()"></div>
-    <div class="set-row"><div><div class="set-label">First period start</div><div class="set-sub">Anchor date — app auto-rolls from here</div></div><input class="set-input" type="date" id="s-craig-anchor" onchange="saveSettings()"></div>
-    <div class="set-row"><div><div class="set-label">Pay day offset</div><div class="set-sub">Days after period ends until pay day</div></div><input class="set-input" type="number" id="s-craig-offset" value="5" onchange="saveSettings()"></div>
+    <div class="set-job-title craig">● Craigweil</div>
+    <div class="set-row"><div><div class="set-label">Hourly rate</div></div><input class="set-input" type="number" id="s-craig-rate" value="26.00" step="0.01"></div>
+    <div class="set-row"><div><div class="set-label">Anchor start date</div><div class="set-sub">First day of your first period</div></div><input class="set-input" type="date" id="s-craig-anchor"></div>
+    <div class="set-row"><div><div class="set-label">Pay day offset (days)</div><div class="set-sub">Days after period ends → pay day</div></div><input class="set-input" type="number" id="s-craig-offset" value="5"></div>
   </div>
   <div class="set-card">
-    <div class="set-job-title" style="color:var(--sub)">Deductions (per period)</div>
-    <div class="set-row"><div><div class="set-label">Pension (before-tax)</div></div><input class="set-input" type="number" id="s-pension" value="147.63" step="0.01" onchange="saveSettings()"></div>
-    <div class="set-row"><div><div class="set-label">Union dues</div></div><input class="set-input" type="number" id="s-union" value="15.73" step="0.01" onchange="saveSettings()"></div>
-    <div class="set-row"><div><div class="set-label">After-tax deductions</div></div><input class="set-input" type="number" id="s-aftertax" value="170.81" step="0.01" onchange="saveSettings()"></div>
+    <div class="set-job-title general">Deductions per period</div>
+    <div class="set-row"><div><div class="set-label">Pension (before-tax)</div></div><input class="set-input" type="number" id="s-pension" value="147.63" step="0.01"></div>
+    <div class="set-row"><div><div class="set-label">Union dues</div></div><input class="set-input" type="number" id="s-union" value="15.73" step="0.01"></div>
+    <div class="set-row"><div><div class="set-label">After-tax deductions</div></div><input class="set-input" type="number" id="s-aftertax" value="170.81" step="0.01"></div>
   </div>
+  <button class="save-btn" onclick="saveSettings()">Save settings</button>
 </div>
 
 <!-- BOTTOM NAV -->
@@ -234,337 +332,427 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <button class="bnav-btn active" id="btn-home" onclick="showPage('home')"><span class="bi">🏠</span>Home</button>
   <button class="bnav-btn" id="btn-log" onclick="showPage('log')"><span class="bi">⏱</span>Log</button>
   <button class="bnav-btn" id="btn-history" onclick="showPage('history')"><span class="bi">📋</span>History</button>
-  <button class="bnav-btn" id="btn-settings" onclick="showPage('settings')"><span class="bi">⚙️</span>Settings</button>
+  <button class="bnav-btn" id="btn-stats" onclick="showPage('stats')"><span class="bi">📊</span>Stats</button>
+  <button class="bnav-btn" id="btn-settings" onclick="showPage('settings')"><span class="bi">⚙️</span>Setup</button>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Constants ─────────────────────────────────────────────────────────────────
+const SHIFTS_KEY = 'pht_shifts_v3';
+const SET_KEY    = 'pht_settings_v3';
 const PERIOD_DAYS = 14;
-const SHIFTS_KEY  = 'pht_shifts_v2';
-const SET_KEY     = 'pht_settings_v2';
 
-// ── Default settings ──────────────────────────────────────────────────────────
-let settings = JSON.parse(localStorage.getItem(SET_KEY) || 'null') || {
-  lhsc:  { rate: 27.01, anchor: '2025-08-21', offset: 6 },
-  craig: { rate: 26.00, anchor: '2025-08-17', offset: 5 },
-  pension: 147.63, union: 15.73, aftertax: 170.81
+let settings = JSON.parse(localStorage.getItem(SET_KEY)||'null') || {
+  lhsc:  {rate:27.01, anchor:'2025-08-21', offset:6},
+  craig: {rate:26.00, anchor:'2025-08-17', offset:5},
+  pension:147.63, union:15.73, aftertax:170.81
 };
 
-// shifts stored as { 'YYYY-MM-DD': [...shifts] } keyed by period start date
-let allShifts = JSON.parse(localStorage.getItem(SHIFTS_KEY) || '{}');
-
+let allShifts = JSON.parse(localStorage.getItem(SHIFTS_KEY)||'{}');
 let activeJob = 'lhsc';
+let editState = {lhsc: null, craig: null}; // null or index being edited
+let histFilter = 'all';
 
-// ── Period calculation ────────────────────────────────────────────────────────
-function getPeriodFor(job, date) {
-  // Given a date, find which biweekly period it belongs to
-  const anchor = new Date(settings[job].anchor + 'T00:00:00');
-  const target = new Date(date + 'T00:00:00');
-  const diffDays = Math.floor((target - anchor) / 86400000);
-  const periodNum = Math.floor(diffDays / PERIOD_DAYS);
-  const start = new Date(anchor);
-  start.setDate(start.getDate() + periodNum * PERIOD_DAYS);
-  const end = new Date(start);
-  end.setDate(end.getDate() + PERIOD_DAYS - 1);
-  const payday = new Date(end);
-  payday.setDate(payday.getDate() + settings[job].offset);
-  return {
-    num: periodNum + 1,
-    start: dateStr(start),
-    end: dateStr(end),
-    payday: dateStr(payday),
-  };
+// ── Utils ─────────────────────────────────────────────────────────────────────
+const fmt  = n => '$'+Math.abs(n).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtS = n => '$'+Math.round(Math.abs(n)).toLocaleString('en-CA');
+const ds   = d => d.toISOString().split('T')[0];
+const fmtD = s => { const d=new Date(s+'T12:00:00'); return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'}); };
+const fmtMY= s => { const d=new Date(s+'T12:00:00'); return d.toLocaleDateString('en-CA',{month:'short',year:'numeric'}); };
+
+function daysUntil(s){
+  const t=new Date(); t.setHours(0,0,0,0);
+  return Math.round((new Date(s+'T00:00:00')-t)/86400000);
 }
 
-function getCurrentPeriod(job) {
-  return getPeriodFor(job, dateStr(new Date()));
+function getPeriodFor(job,date){
+  const anchor=new Date(settings[job].anchor+'T00:00:00');
+  const target=new Date(date+'T00:00:00');
+  const diff=Math.floor((target-anchor)/86400000);
+  const pn=Math.max(0,Math.floor(diff/PERIOD_DAYS));
+  const start=new Date(anchor); start.setDate(start.getDate()+pn*PERIOD_DAYS);
+  const end=new Date(start); end.setDate(end.getDate()+PERIOD_DAYS-1);
+  const payday=new Date(end); payday.setDate(payday.getDate()+settings[job].offset);
+  return {num:pn+1, start:ds(start), end:ds(end), payday:ds(payday)};
 }
 
-function dateStr(d) {
-  return d.toISOString().split('T')[0];
+function getCurrentPeriod(job){ return getPeriodFor(job,ds(new Date())); }
+
+function getShifts(job,pStart){ return allShifts[job+'_'+pStart]||[]; }
+function setShifts(job,pStart,s){ allShifts[job+'_'+pStart]=s; localStorage.setItem(SHIFTS_KEY,JSON.stringify(allShifts)); }
+
+function calcPay(job,hrs,type,extra){
+  const rate=settings[job].rate;
+  const ot=type==='OT 1.5x'||type==='Holiday';
+  return hrs*rate*(ot?1.5:1)+(extra||0);
 }
 
-function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-function fmtS(n) { return '$' + n.toLocaleString('en-CA', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
-function fmtD(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
-  return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
-}
-
-function daysUntil(dateStr) {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const target = new Date(dateStr + 'T00:00:00');
-  return Math.round((target - today) / 86400000);
-}
-
-function countdownText(dateStr) {
-  const d = daysUntil(dateStr);
-  if (d < 0)  return { text: '✓ Paid', cls: 'later' };
-  if (d === 0) return { text: '🎉 PAY DAY TODAY!', cls: 'soon' };
-  if (d === 1) return { text: '💰 Pay day tomorrow!', cls: 'soon' };
-  if (d <= 5)  return { text: `${d} days to pay day`, cls: 'soon' };
-  return { text: `${d} days to pay day`, cls: 'later' };
-}
-
-// ── Shifts helpers ────────────────────────────────────────────────────────────
-function calcPay(job, hrs, type, extra) {
-  const rate = settings[job].rate;
-  const isOT = type === 'OT 1.5x' || type === 'Holiday';
-  return hrs * rate * (isOT ? 1.5 : 1) + (extra || 0);
-}
-
-function periodKey(job) {
-  return job + '_' + getCurrentPeriod(job).start;
-}
-
-function getShifts(job, periodStart) {
-  return allShifts[job + '_' + periodStart] || [];
-}
-
-function setShifts(job, periodStart, s) {
-  allShifts[job + '_' + periodStart] = s;
-  localStorage.setItem(SHIFTS_KEY, JSON.stringify(allShifts));
-}
-
-function periodSummary(shifts, rate) {
-  let hrs = 0, regPay = 0, otPay = 0;
-  shifts.forEach(s => {
-    hrs += s.hrs;
-    if (s.type === 'OT 1.5x' || s.type === 'Holiday') otPay += s.pay;
-    else regPay += s.pay;
+function summarize(shifts){
+  let hrs=0,regPay=0,otPay=0;
+  shifts.forEach(s=>{
+    hrs+=s.hrs;
+    if(s.type==='OT 1.5x'||s.type==='Holiday') otPay+=s.pay;
+    else regPay+=s.pay;
   });
-  return { hrs, regPay, otPay, gross: regPay + otPay };
+  return {hrs,regPay,otPay,gross:regPay+otPay};
 }
 
-// ── Tax estimate ──────────────────────────────────────────────────────────────
-function calcTax(periodGross) {
-  const periods = 26;
-  const ann = periodGross * periods;
-  const bt  = (settings.pension + settings.union) * periods;
-  const t   = Math.max(0, ann - bt);
-  const fed  = Math.max(0, Math.min(t,55867)*.15 + Math.max(0,Math.min(t,111733)-55867)*.205 + Math.max(0,Math.min(t,154906)-111733)*.26 + Math.max(0,Math.min(t,220000)-154906)*.29 + Math.max(0,t-220000)*.33 - 15705*.15);
-  const prov = Math.max(0, Math.min(t,51446)*.0505 + Math.max(0,Math.min(t,102894)-51446)*.0915 + Math.max(0,Math.min(t,150000)-102894)*.1116 + Math.max(0,Math.min(t,220000)-150000)*.1216 + Math.max(0,t-220000)*.1316 - 11865*.0505);
-  const cpp  = Math.min(Math.max(ann-3500,0),65000)*.0595;
-  const ei   = Math.min(ann,63200)*.0166;
-  return (fed+prov+cpp+ei)/periods;
+function calcTax(gross){
+  const p=26, ann=gross*p, bt=(settings.pension+settings.union)*p;
+  const t=Math.max(0,ann-bt);
+  const fed=Math.max(0,Math.min(t,55867)*.15+Math.max(0,Math.min(t,111733)-55867)*.205+Math.max(0,Math.min(t,154906)-111733)*.26+Math.max(0,Math.min(t,220000)-154906)*.29+Math.max(0,t-220000)*.33-15705*.15);
+  const prov=Math.max(0,Math.min(t,51446)*.0505+Math.max(0,Math.min(t,102894)-51446)*.0915+Math.max(0,Math.min(t,150000)-102894)*.1116+Math.max(0,Math.min(t,220000)-150000)*.1216+Math.max(0,t-220000)*.1316-11865*.0505);
+  const cpp=Math.min(Math.max(ann-3500,0),65000)*.0595;
+  const ei=Math.min(ann,63200)*.0166;
+  return (fed+prov+cpp+ei)/p;
+}
+
+function progressPct(job){
+  const p=getCurrentPeriod(job);
+  const start=new Date(p.start+'T00:00:00');
+  const end=new Date(p.end+'T00:00:00');
+  const now=new Date(); now.setHours(0,0,0,0);
+  const total=(end-start)/86400000+1;
+  const elapsed=Math.min(total,Math.max(0,(now-start)/86400000+1));
+  return Math.round(elapsed/total*100);
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
-function renderAll() {
-  renderHome();
-  renderLog();
-  renderHistory();
-  renderSettingsPage();
-}
+function renderAll(){ renderHome(); renderLog(); renderHistory(); renderStats(); renderSettingsPage(); }
 
-function renderHome() {
-  ['lhsc','craig'].forEach(job => {
-    const p = getCurrentPeriod(job);
-    const shifts = getShifts(job, p.start);
-    const { hrs, gross } = periodSummary(shifts);
-    const cd = countdownText(p.payday);
-
-    const color = job === 'lhsc' ? 'var(--lhsc)' : 'var(--craig)';
-    const name  = job === 'lhsc' ? 'LHSC' : 'Craigweil';
-
-    document.getElementById(job+'-pay-card').innerHTML = `
-      <div class="pay-card ${job}">
-        <div>
-          <div class="pc-name ${job}">${name}</div>
-          <div class="pc-period">Period ${p.num}: ${fmtD(p.start)} – ${fmtD(p.end)}</div>
-          <div class="pc-payday">Pay day: ${fmtD(p.payday)}</div>
-          <div class="pc-countdown ${cd.cls}">${cd.text}</div>
+function renderHome(){
+  ['lhsc','craig'].forEach(job=>{
+    const p=getCurrentPeriod(job);
+    const s=getShifts(job,p.start);
+    const {hrs,gross}=summarize(s);
+    const cd=countdownInfo(p.payday);
+    const pct=progressPct(job);
+    const name=job==='lhsc'?'LHSC':'Craigweil';
+    document.getElementById(job+'-hero').innerHTML=`
+      <div class="job-hero ${job}">
+        <div class="jh-glow ${job}"></div>
+        <div class="jh-top">
+          <div>
+            <div class="jh-name ${job}">${name}</div>
+            <div class="jh-period">Period ${p.num} · ${fmtD(p.start)} – ${fmtD(p.end)}</div>
+            <div class="jh-rate">$${settings[job].rate.toFixed(2)}/hr</div>
+          </div>
+          <div style="text-align:right">
+            <div class="jh-gross ${job}">${fmt(gross)}</div>
+            <div class="jh-hrs">${hrs.toFixed(2)} hrs</div>
+          </div>
         </div>
-        <div class="pc-right">
-          <div class="pc-gross ${job}">${fmt(gross)}</div>
-          <div class="pc-hrs">${hrs.toFixed(2)} hrs logged</div>
-          <div class="pc-period-num">@ $${settings[job].rate.toFixed(2)}/hr</div>
+        <div class="progress-wrap"><div class="progress-bar ${job}" style="width:${pct}%"></div></div>
+        <div class="jh-bottom">
+          <div class="jh-countdown ${cd.cls}">${cd.text}</div>
+          <div class="jh-payday">Pay day ${fmtD(p.payday)}</div>
         </div>
       </div>`;
   });
 
-  const lp = getCurrentPeriod('lhsc');
-  const cp = getCurrentPeriod('craig');
-  const lShifts = getShifts('lhsc', lp.start);
-  const cShifts = getShifts('craig', cp.start);
-  const lSum = periodSummary(lShifts);
-  const cSum = periodSummary(cShifts);
-  const combined = lSum.gross + cSum.gross;
-  const totalHrs = lSum.hrs + cSum.hrs;
-  const tax = calcTax(combined);
-  const ded = settings.pension + settings.union + settings.aftertax;
-  const net = combined - tax - ded;
+  const lp=getCurrentPeriod('lhsc'), cp=getCurrentPeriod('craig');
+  const ls=summarize(getShifts('lhsc',lp.start)), cs=summarize(getShifts('craig',cp.start));
+  const combined=ls.gross+cs.gross, totalHrs=ls.hrs+cs.hrs;
+  const tax=calcTax(combined), ded=settings.pension+settings.union+settings.aftertax;
+  const net=combined-tax-ded;
 
-  document.getElementById('combined-card').innerHTML = `
-    <div class="comb-row"><span class="comb-label">Combined gross</span><span class="comb-big">${fmt(combined)}</span></div>
-    <div class="comb-row"><span class="comb-label">Est. tax (Ontario 2024)</span><span class="comb-val" style="color:var(--red)">-${fmt(tax)}</span></div>
-    <div class="comb-row"><span class="comb-label">Deductions</span><span class="comb-val" style="color:var(--red)">-${fmt(ded)}</span></div>
-    <div class="comb-row"><span class="comb-label">Est. net take-home</span><span class="comb-val" style="color:var(--green)">${fmt(net)}</span></div>
-    <div class="comb-row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:10px"><span class="comb-label">Total hours both jobs</span><span class="comb-val">${totalHrs.toFixed(2)} hrs</span></div>
-    <div class="comb-row"><span class="comb-label">LHSC hours</span><span class="comb-val" style="color:var(--lhsc)">${lSum.hrs.toFixed(2)} hrs</span></div>
-    <div class="comb-row"><span class="comb-label">Craigweil hours</span><span class="comb-val" style="color:var(--craig)">${cSum.hrs.toFixed(2)} hrs</span></div>`;
+  document.getElementById('combined-card').innerHTML=`
+    <div class="cc-title">Combined this period</div>
+    <div class="cc-big"><span class="cc-gross-label">Total gross</span><span class="cc-gross-val">${fmt(combined)}</span></div>
+    <div class="cc-rows">
+      <div class="cc-row"><span class="cc-row-label">Est. tax (Ontario)</span><span class="cc-row-val" style="color:var(--red)">−${fmt(tax)}</span></div>
+      <div class="cc-row"><span class="cc-row-label">Deductions</span><span class="cc-row-val" style="color:var(--red)">−${fmt(ded)}</span></div>
+      <div class="cc-divider"></div>
+      <div class="cc-row"><span class="cc-row-label">Est. net take-home</span><span class="cc-row-val" style="color:var(--green);font-size:16px">${fmt(net)}</span></div>
+      <div class="cc-divider"></div>
+      <div class="cc-row"><span class="cc-row-label">LHSC hours</span><span class="cc-row-val" style="color:var(--lhsc)">${ls.hrs.toFixed(2)} hrs</span></div>
+      <div class="cc-row"><span class="cc-row-label">Craigweil hours</span><span class="cc-row-val" style="color:var(--craig)">${cs.hrs.toFixed(2)} hrs</span></div>
+      <div class="cc-row"><span class="cc-row-label">Total hours</span><span class="cc-row-val">${totalHrs.toFixed(2)} hrs</span></div>
+    </div>`;
 
-  document.getElementById('top-total').textContent = fmt(combined);
-  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-CA', { weekday:'short', month:'short', day:'numeric' });
+  document.getElementById('tb-amount').textContent=fmt(combined);
+  document.getElementById('tb-date').textContent=new Date().toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
 
-  // Notifications
-  const lCD = daysUntil(lp.payday);
-  const cCD = daysUntil(cp.payday);
-  const shown = sessionStorage.getItem('notif_shown');
-  if (!shown) {
-    sessionStorage.setItem('notif_shown','1');
-    if (lCD === 0) showToast('🎉 LHSC pay day TODAY — ' + fmt(lSum.gross));
-    else if (cCD === 0) showToast('🎉 Craigweil pay day TODAY — ' + fmt(cSum.gross));
-    else if (lCD === 1) showToast('💰 LHSC pay day TOMORROW!');
-    else if (cCD === 1) showToast('💰 Craigweil pay day TOMORROW!');
-    else if (lCD <= 3 || cCD <= 3) showToast('💰 Pay day coming soon — ' + fmt(combined) + ' earned');
+  // Pay day notification (once per session)
+  if(!sessionStorage.getItem('notif')){
+    sessionStorage.setItem('notif','1');
+    const lD=daysUntil(lp.payday), cD=daysUntil(cp.payday);
+    if(lD===0) showToast('🎉 LHSC pay day TODAY! '+fmt(ls.gross));
+    else if(cD===0) showToast('🎉 Craigweil pay day TODAY! '+fmt(cs.gross));
+    else if(lD===1) showToast('💰 LHSC pay day TOMORROW!');
+    else if(cD===1) showToast('💰 Craigweil pay day TOMORROW!');
+    else if(lD<=4||cD<=4) showToast('📅 Pay day coming soon — '+fmt(combined)+' earned');
   }
 }
 
-function renderLog() {
-  ['lhsc','craig'].forEach(job => {
-    const p = getCurrentPeriod(job);
-    const shifts = getShifts(job, p.start);
-    const rowsEl = document.getElementById(job+'-rows');
+function countdownInfo(dateStr){
+  const d=daysUntil(dateStr);
+  if(d<0)  return {text:'✓ Paid',cls:'later'};
+  if(d===0) return {text:'🎉 PAY DAY TODAY!',cls:'soon'};
+  if(d===1) return {text:'💰 Pay day tomorrow',cls:'soon'};
+  if(d<=5)  return {text:`${d} days to pay day`,cls:'close'};
+  return {text:`${d} days to pay day`,cls:'later'};
+}
 
-    if (!shifts.length) {
-      rowsEl.innerHTML = '<div class="log-empty">No shifts yet — add one below</div>';
+function renderLog(){
+  ['lhsc','craig'].forEach(job=>{
+    const p=getCurrentPeriod(job);
+    const shifts=getShifts(job,p.start);
+    const rowsEl=document.getElementById(job+'-rows');
+
+    if(!shifts.length){
+      rowsEl.innerHTML='<div class="log-empty">No shifts yet — add one below 👇</div>';
     } else {
-      rowsEl.innerHTML = shifts.map((s,i) => `
-        <div class="shift-row">
+      rowsEl.innerHTML=shifts.map((s,i)=>`
+        <div class="shift-row ${editState[job]===i?'':''}">
           <span class="sr-date">${fmtD(s.date)}</span>
           <span class="sr-type">${s.type}</span>
           <span class="sr-hrs">${s.hrs.toFixed(2)}</span>
           <span class="sr-pay">${fmt(s.pay)}</span>
-          <button class="sr-del" onclick="delShift('${job}','${p.start}',${i})">×</button>
+          <span class="sr-actions">
+            <button class="icon-btn edit" onclick="startEdit('${job}',${i})" title="Edit">✏️</button>
+            <button class="icon-btn del" onclick="delShift('${job}','${p.start}',${i})" title="Delete">×</button>
+          </span>
         </div>`).join('');
     }
 
-    const { hrs, regPay, otPay, gross } = periodSummary(shifts);
-    document.getElementById('lf-'+job+'-hrs').textContent = hrs.toFixed(2);
-    document.getElementById('lf-'+job+'-reg').textContent = fmtS(regPay);
-    document.getElementById('lf-'+job+'-ot').textContent = fmtS(otPay);
-    document.getElementById('lf-'+job+'-gross').textContent = fmtS(gross);
+    const {hrs,regPay,otPay,gross}=summarize(shifts);
+    document.getElementById('lf-'+job+'-hrs').textContent=hrs.toFixed(2);
+    document.getElementById('lf-'+job+'-reg').textContent=fmtS(regPay);
+    document.getElementById('lf-'+job+'-ot').textContent=fmtS(otPay);
+    document.getElementById('lf-'+job+'-gross').textContent=fmtS(gross);
   });
 }
 
-function renderHistory() {
-  // Collect all unique period keys grouped by job
-  const el = document.getElementById('history-content');
-  const pastLHSC = getPastPeriods('lhsc');
-  const pastCraig = getPastPeriods('craig');
-  const all = [...pastLHSC.map(p=>({...p,job:'lhsc'})), ...pastCraig.map(p=>({...p,job:'craig'}))];
-  all.sort((a,b) => b.start.localeCompare(a.start));
+function renderHistory(){
+  const el=document.getElementById('history-content');
+  const jobs=histFilter==='all'?['lhsc','craig']:[histFilter];
+  const currentLHSC=getCurrentPeriod('lhsc').start;
+  const currentCraig=getCurrentPeriod('craig').start;
 
-  if (!all.length) { el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:12px">No past periods yet</div>'; return; }
+  let periods=[];
+  jobs.forEach(job=>{
+    const cur=job==='lhsc'?currentLHSC:currentCraig;
+    Object.keys(allShifts).filter(k=>k.startsWith(job+'_')).forEach(k=>{
+      const start=k.replace(job+'_','');
+      const p=getPeriodFor(job,start);
+      periods.push({...p,job,isCurrent:start===cur});
+    });
+  });
 
-  el.innerHTML = all.map((p,i) => {
-    const shifts = getShifts(p.job, p.start);
-    const { hrs, gross } = periodSummary(shifts);
-    const name = p.job === 'lhsc' ? 'LHSC' : 'Craigweil';
-    const shiftRows = shifts.map(s=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px"><span>${fmtD(s.date)} — ${s.type}</span><span style="color:var(--sub)">${s.hrs}h</span><span>${fmt(s.pay)}</span></div>`).join('');
-    return `
-      <div class="period-block">
-        <div class="period-hdr" onclick="togglePeriod('ph${i}')">
-          <div class="period-hdr-left">
-            <div class="ph-name" style="color:var(--${p.job})">${name} · Period ${p.num}</div>
-            <div class="ph-dates">${fmtD(p.start)} – ${fmtD(p.end)} · Pay day ${fmtD(p.payday)}</div>
+  // Also include current period
+  jobs.forEach(job=>{
+    const cur=job==='lhsc'?currentLHSC:currentCraig;
+    if(!periods.find(p=>p.job===job&&p.start===cur)){
+      const p=getCurrentPeriod(job);
+      periods.push({...p,job,isCurrent:true});
+    }
+  });
+
+  periods.sort((a,b)=>b.start.localeCompare(a.start)||(a.job>b.job?1:-1));
+
+  if(!periods.length){el.innerHTML='<div style="color:var(--sub);font-size:13px;padding:12px">No history yet</div>';return;}
+
+  el.innerHTML=periods.map((p,i)=>{
+    const shifts=getShifts(p.job,p.start);
+    const {hrs,regPay,otPay,gross}=summarize(shifts);
+    const name=p.job==='lhsc'?'LHSC':'Craigweil';
+    const color=p.job==='lhsc'?'var(--lhsc)':'var(--craig)';
+    const cd=p.isCurrent?'<span style="font-size:10px;background:var(--greenl);color:var(--green);padding:2px 8px;border-radius:20px;margin-left:6px;font-weight:700">Current</span>':'';
+    return`
+      <div class="period-card">
+        <div class="period-hdr" onclick="togglePeriod('ph${i}','chev${i}')">
+          <div class="ph-left">
+            <div class="ph-tag" style="color:${color}">${name} · Period ${p.num}${cd}</div>
+            <div class="ph-dates">${fmtD(p.start)} – ${fmtD(p.end)}</div>
+            <div class="ph-payday">Pay day: ${fmtD(p.payday)}</div>
           </div>
-          <div class="period-hdr-right">
-            <div class="ph-gross ${p.job}">${fmt(gross)}</div>
-            <div class="ph-hrs">${hrs.toFixed(2)} hrs</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="ph-right">
+              <div class="ph-gross ${p.job}">${fmt(gross)}</div>
+              <div class="ph-hrs">${hrs.toFixed(2)} hrs</div>
+            </div>
+            <span class="chevron" id="chev${i}">›</span>
           </div>
         </div>
         <div class="period-body" id="ph${i}">
-          ${shifts.length ? shiftRows : '<div style="color:var(--sub);font-size:12px;padding:6px 0">No shifts logged</div>'}
+          <div class="period-stat-grid">
+            <div class="psg-item"><div class="psg-label">Gross</div><div class="psg-val" style="color:${color}">${fmt(gross)}</div></div>
+            <div class="psg-item"><div class="psg-label">Hours</div><div class="psg-val">${hrs.toFixed(2)}</div></div>
+            <div class="psg-item"><div class="psg-label">OT/Prem</div><div class="psg-val">${fmt(otPay)}</div></div>
+          </div>
+          ${shifts.length?shifts.map(s=>`
+            <div class="mini-shift">
+              <span class="ms-left">${fmtD(s.date)} · ${s.type}</span>
+              <span>${s.hrs.toFixed(2)} hrs</span>
+              <span class="ms-pay">${fmt(s.pay)}</span>
+            </div>`).join(''):'<div style="color:var(--sub);font-size:12px;padding:6px 0">No shifts logged</div>'}
         </div>
       </div>`;
   }).join('');
 }
 
-function getPastPeriods(job) {
-  const current = getCurrentPeriod(job);
-  const past = [];
-  Object.keys(allShifts).forEach(key => {
-    if (key.startsWith(job + '_')) {
-      const start = key.replace(job + '_', '');
-      if (start !== current.start) {
-        const p = getPeriodFor(job, start);
-        past.push(p);
-      }
+function renderStats(){
+  // Gather all period data
+  let totalGross=0,totalHrs=0,periods=[];
+  const jobs=['lhsc','craig'];
+  jobs.forEach(job=>{
+    Object.keys(allShifts).filter(k=>k.startsWith(job+'_')).forEach(k=>{
+      const start=k.replace(job+'_','');
+      const shifts=getShifts(job,start);
+      const {hrs,gross}=summarize(shifts);
+      const p=getPeriodFor(job,start);
+      totalGross+=gross; totalHrs+=hrs;
+      periods.push({job,start,hrs,gross,payday:p.payday,num:p.num});
+    });
+    const cur=getCurrentPeriod(job);
+    if(!allShifts[job+'_'+cur.start]){
+      const {hrs,gross}=summarize(getShifts(job,cur.start));
+      totalGross+=gross; totalHrs+=hrs;
+      periods.push({job,start:cur.start,hrs,gross,payday:cur.payday,num:cur.num});
     }
   });
-  return past;
+
+  const lhscGross=periods.filter(p=>p.job==='lhsc').reduce((s,p)=>s+p.gross,0);
+  const craigGross=periods.filter(p=>p.job==='craig').reduce((s,p)=>s+p.gross,0);
+  const lhscHrs=periods.filter(p=>p.job==='lhsc').reduce((s,p)=>s+p.hrs,0);
+  const craigHrs=periods.filter(p=>p.job==='craig').reduce((s,p)=>s+p.hrs,0);
+
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-card"><div class="sc-label">Total earned</div><div class="sc-val" style="color:var(--green)">${fmt(totalGross)}</div><div class="sc-sub">All periods combined</div></div>
+    <div class="stat-card"><div class="sc-label">Total hours</div><div class="sc-val">${totalHrs.toFixed(1)}</div><div class="sc-sub">Both jobs logged</div></div>
+    <div class="stat-card"><div class="sc-label">LHSC total</div><div class="sc-val" style="color:var(--lhsc)">${fmt(lhscGross)}</div><div class="sc-sub">${lhscHrs.toFixed(1)} hrs</div></div>
+    <div class="stat-card"><div class="sc-label">Craigweil total</div><div class="sc-val" style="color:var(--craig)">${fmt(craigGross)}</div><div class="sc-sub">${craigHrs.toFixed(1)} hrs</div></div>`;
+
+  // Pay chart — recent periods
+  const recent=periods.sort((a,b)=>b.start.localeCompare(a.start)).slice(0,8).reverse();
+  const maxG=Math.max(...recent.map(p=>p.gross),1);
+  document.getElementById('pay-chart').innerHTML=`
+    <div class="bc-title">Gross pay by period</div>
+    ${recent.map(p=>`
+      <div class="bc-row">
+        <span class="bc-label" style="color:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}">${p.job==='lhsc'?'LHSC':'Craig'} ${p.num}</span>
+        <div class="bc-bar-wrap"><div class="bc-bar" style="width:${(p.gross/maxG*100).toFixed(0)}%;background:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}"></div></div>
+        <span class="bc-val">${fmtS(p.gross)}</span>
+      </div>`).join('')}`;
+
+  const maxH=Math.max(...recent.map(p=>p.hrs),1);
+  document.getElementById('hrs-chart').innerHTML=`
+    <div class="bc-title">Hours by period</div>
+    ${recent.map(p=>`
+      <div class="bc-row">
+        <span class="bc-label" style="color:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}">${p.job==='lhsc'?'LHSC':'Craig'} ${p.num}</span>
+        <div class="bc-bar-wrap"><div class="bc-bar" style="width:${(p.hrs/maxH*100).toFixed(0)}%;background:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}"></div></div>
+        <span class="bc-val">${p.hrs.toFixed(1)}h</span>
+      </div>`).join('')}`;
 }
 
-window.togglePeriod = (id) => {
-  const el = document.getElementById(id);
+function renderSettingsPage(){
+  document.getElementById('s-lhsc-rate').value=settings.lhsc.rate;
+  document.getElementById('s-lhsc-anchor').value=settings.lhsc.anchor;
+  document.getElementById('s-lhsc-offset').value=settings.lhsc.offset;
+  document.getElementById('s-craig-rate').value=settings.craig.rate;
+  document.getElementById('s-craig-anchor').value=settings.craig.anchor;
+  document.getElementById('s-craig-offset').value=settings.craig.offset;
+  document.getElementById('s-pension').value=settings.pension;
+  document.getElementById('s-union').value=settings.union;
+  document.getElementById('s-aftertax').value=settings.aftertax;
+}
+
+// ── Edit functionality ────────────────────────────────────────────────────────
+window.startEdit = (job, idx) => {
+  const p=getCurrentPeriod(job);
+  const shifts=getShifts(job,p.start);
+  const s=shifts[idx];
+  editState[job]=idx;
+
+  document.getElementById(job+'-date').value=s.date;
+  document.getElementById(job+'-type').value=s.type;
+  document.getElementById(job+'-hrs').value=s.hrs;
+  document.getElementById(job+'-extra').value=s.extra||0;
+
+  document.getElementById(job+'-form-title').textContent='Edit shift';
+  document.getElementById(job+'-edit-badge').style.display='inline-flex';
+  document.getElementById(job+'-submit-btn').textContent='Save changes';
+  document.getElementById(job+'-submit-btn').className='form-btn primary edit';
+  document.getElementById(job+'-cancel-btn').style.display='block';
+
+  // Switch to that job's tab if needed
+  switchJob(job);
+  showPage('log');
+
+  // Scroll to form
+  setTimeout(()=>document.getElementById(job+'-form-card').scrollIntoView({behavior:'smooth',block:'center'}),100);
+};
+
+window.cancelEdit = (job) => {
+  editState[job]=null;
+  document.getElementById(job+'-date').value=ds(new Date());
+  document.getElementById(job+'-hrs').value='';
+  document.getElementById(job+'-extra').value='';
+  document.getElementById(job+'-form-title').textContent='Add shift';
+  document.getElementById(job+'-edit-badge').style.display='none';
+  document.getElementById(job+'-submit-btn').textContent='+ Add shift';
+  document.getElementById(job+'-submit-btn').className=`form-btn primary ${job}`;
+  document.getElementById(job+'-cancel-btn').style.display='none';
+};
+
+window.submitShift = (job) => {
+  const date=document.getElementById(job+'-date').value;
+  const type=document.getElementById(job+'-type').value;
+  const hrs=parseFloat(document.getElementById(job+'-hrs').value);
+  const extra=parseFloat(document.getElementById(job+'-extra').value)||0;
+  if(!date){showToast('Pick a date');return;}
+  if(!hrs||hrs<=0){showToast('Enter hours');return;}
+  const p=getPeriodFor(job,date);
+  const pay=calcPay(job,hrs,type,extra);
+  const shifts=getShifts(job,p.start);
+
+  if(editState[job]!==null){
+    shifts[editState[job]]={date,type,hrs,pay,extra};
+    showToast('✓ Shift updated — '+fmt(pay));
+    cancelEdit(job);
+  } else {
+    shifts.push({date,type,hrs,pay,extra});
+    showToast('✓ Shift added — '+fmt(pay));
+    document.getElementById(job+'-hrs').value='';
+    document.getElementById(job+'-extra').value='';
+  }
+  shifts.sort((a,b)=>a.date.localeCompare(b.date));
+  setShifts(job,p.start,shifts);
+  renderAll();
+};
+
+window.delShift = (job,periodStart,idx) => {
+  if(!confirm('Remove this shift?')) return;
+  const shifts=getShifts(job,periodStart);
+  shifts.splice(idx,1);
+  setShifts(job,periodStart,shifts);
+  renderAll();
+  showToast('Shift removed');
+};
+
+window.togglePeriod = (id,chevId) => {
+  const el=document.getElementById(id);
+  const chev=document.getElementById(chevId);
   el.classList.toggle('open');
+  chev.classList.toggle('open');
 };
 
-function renderSettingsPage() {
-  document.getElementById('s-lhsc-rate').value = settings.lhsc.rate;
-  document.getElementById('s-lhsc-anchor').value = settings.lhsc.anchor;
-  document.getElementById('s-lhsc-offset').value = settings.lhsc.offset;
-  document.getElementById('s-craig-rate').value = settings.craig.rate;
-  document.getElementById('s-craig-anchor').value = settings.craig.anchor;
-  document.getElementById('s-craig-offset').value = settings.craig.offset;
-  document.getElementById('s-pension').value = settings.pension;
-  document.getElementById('s-union').value = settings.union;
-  document.getElementById('s-aftertax').value = settings.aftertax;
-}
-
-// ── Actions ───────────────────────────────────────────────────────────────────
-window.addShift = (job) => {
-  const date  = document.getElementById(job+'-date').value;
-  const type  = document.getElementById(job+'-type').value;
-  const hrs   = parseFloat(document.getElementById(job+'-hrs').value);
-  const extra = parseFloat(document.getElementById(job+'-extra').value) || 0;
-  if (!date) { showToast('Pick a date'); return; }
-  if (!hrs || hrs <= 0) { showToast('Enter hours'); return; }
-  const p   = getPeriodFor(job, date);
-  const pay = calcPay(job, hrs, type, extra);
-  const shifts = getShifts(job, p.start);
-  shifts.push({ date, type, hrs, pay, extra });
-  shifts.sort((a,b) => a.date.localeCompare(b.date));
-  setShifts(job, p.start, shifts);
-  document.getElementById(job+'-hrs').value = '';
-  document.getElementById(job+'-extra').value = '';
-  renderAll();
-  showToast('✓ Shift added — ' + fmt(pay));
-};
-
-window.delShift = (job, periodStart, idx) => {
-  const shifts = getShifts(job, periodStart);
-  shifts.splice(idx, 1);
-  setShifts(job, periodStart, shifts);
-  renderAll();
-  showToast('Removed');
-};
-
-window.saveSettings = () => {
-  settings.lhsc.rate   = parseFloat(document.getElementById('s-lhsc-rate').value) || 27.01;
-  settings.lhsc.anchor = document.getElementById('s-lhsc-anchor').value;
-  settings.lhsc.offset = parseInt(document.getElementById('s-lhsc-offset').value) || 6;
-  settings.craig.rate   = parseFloat(document.getElementById('s-craig-rate').value) || 26.00;
-  settings.craig.anchor = document.getElementById('s-craig-anchor').value;
-  settings.craig.offset = parseInt(document.getElementById('s-craig-offset').value) || 5;
-  settings.pension  = parseFloat(document.getElementById('s-pension').value) || 0;
-  settings.union    = parseFloat(document.getElementById('s-union').value) || 0;
-  settings.aftertax = parseFloat(document.getElementById('s-aftertax').value) || 0;
-  localStorage.setItem(SET_KEY, JSON.stringify(settings));
-  renderAll();
-  showToast('✓ Settings saved');
+window.filterHistory = (f,btn) => {
+  histFilter=f;
+  document.querySelectorAll('.hist-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory();
 };
 
 window.switchJob = (job) => {
-  activeJob = job;
-  document.getElementById('log-lhsc').style.display = job==='lhsc'?'block':'none';
-  document.getElementById('log-craig').style.display = job==='craig'?'block':'none';
-  document.getElementById('pill-lhsc').classList.toggle('active', job==='lhsc');
-  document.getElementById('pill-craig').classList.toggle('active', job==='craig');
+  activeJob=job;
+  document.getElementById('log-lhsc').style.display=job==='lhsc'?'block':'none';
+  document.getElementById('log-craig').style.display=job==='craig'?'block':'none';
+  document.getElementById('jt-lhsc').className='jt-btn lhsc'+(job==='lhsc'?' active':'');
+  document.getElementById('jt-craig').className='jt-btn craig'+(job==='craig'?' active':'');
 };
 
 window.showPage = (name) => {
@@ -575,16 +763,340 @@ window.showPage = (name) => {
   renderAll();
 };
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+window.saveSettings = () => {
+  settings.lhsc.rate=parseFloat(document.getElementById('s-lhsc-rate').value)||27.01;
+  settings.lhsc.anchor=document.getElementById('s-lhsc-anchor').value;
+  settings.lhsc.offset=parseInt(document.getElementById('s-lhsc-offset').value)||6;
+  settings.craig.rate=parseFloat(document.getElementById('s-craig-rate').value)||26.00;
+  settings.craig.anchor=document.getElementById('s-craig-anchor').value;
+  settings.craig.offset=parseInt(document.getElementById('s-craig-offset').value)||5;
+  settings.pension=parseFloat(document.getElementById('s-pension').value)||0;
+  settings.union=parseFloat(document.getElementById('s-union').value)||0;
+  settings.aftertax=parseFloat(document.getElementById('s-aftertax').value)||0;
+  localStorage.setItem(SET_KEY,JSON.stringify(settings));
+  renderAll();
+  showToast('✓ Settings saved');
+};
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-document.getElementById('lhsc-date').value = dateStr(new Date());
-document.getElementById('craig-date').value = dateStr(new Date());
+document.getElementById('lhsc-date').value=ds(new Date());
+document.getElementById('craig-date').value=ds(new Date());
 renderAll();
 </script>
 </body>
 </html>
+
+<script>
+// ── INVESTMENT MODULE (appended) ──────────────────────────────────────────────
+// Patch bottom nav to add Invest tab
+document.querySelector('.bottom-nav').innerHTML = `
+  <button class="bnav-btn active" id="btn-home" onclick="showPage('home')"><span class="bi">🏠</span>Home</button>
+  <button class="bnav-btn" id="btn-log" onclick="showPage('log')"><span class="bi">⏱</span>Log</button>
+  <button class="bnav-btn" id="btn-history" onclick="showPage('history')"><span class="bi">📋</span>History</button>
+  <button class="bnav-btn" id="btn-invest" onclick="showPage('invest')"><span class="bi">📈</span>Invest</button>
+  <button class="bnav-btn" id="btn-settings" onclick="showPage('settings')"><span class="bi">⚙️</span>Setup</button>`;
+
+// Remove stats nav btn and page (replaced by invest in nav, stats still accessible via history)
+// Add invest page
+const investPage = document.createElement('div');
+investPage.className = 'page';
+investPage.id = 'page-invest';
+investPage.innerHTML = `
+<style>
+.inv-hero{background:linear-gradient(135deg,#0d1f12 0%,#0a1a22 100%);border:1px solid #1a3a2a;border-radius:16px;padding:20px;margin-bottom:12px;position:relative;overflow:hidden}
+.inv-hero-glow{position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:var(--green);opacity:0.08;filter:blur(30px)}
+.inv-hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--green);margin-bottom:6px}
+.inv-hero-amount{font-size:38px;font-weight:800;color:var(--green);letter-spacing:-1.5px;font-variant-numeric:tabular-nums;line-height:1}
+.inv-hero-sub{font-size:12px;color:var(--sub);margin-top:6px}
+.inv-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.inv-stat{background:rgba(0,0,0,0.3);border-radius:10px;padding:11px;text-align:center}
+.inv-stat-label{font-size:10px;color:var(--sub);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em}
+.inv-stat-val{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+
+.inv-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.inv-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);margin-bottom:14px}
+
+.inv-setting-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.inv-setting-row:last-child{border-bottom:none}
+.inv-setting-label{font-size:13px;font-weight:500}
+.inv-setting-sub{font-size:11px;color:var(--sub);margin-top:2px}
+.inv-input{height:40px;width:110px;border:1.5px solid var(--border);border-radius:10px;background:var(--s2);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:0 10px;outline:none;text-align:right}
+.inv-input:focus{border-color:var(--green)}
+.inv-pct-group{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.inv-pct-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--s2);color:var(--sub);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.15s}
+.inv-pct-btn.active{background:#0d3326;border-color:var(--green);color:var(--green)}
+
+.growth-table{width:100%;border-collapse:collapse;font-size:13px}
+.growth-table th{text-align:left;color:var(--sub);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.07em;padding:8px 0;border-bottom:1px solid var(--border)}
+.growth-table th:not(:first-child){text-align:right}
+.growth-table td{padding:10px 0;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
+.growth-table td:not(:first-child){text-align:right;font-weight:600}
+.growth-table tr:last-child td{border-bottom:none}
+.gt-year{font-size:12px;font-weight:700;color:var(--sub)}
+.gt-low{color:#8ab4f8}.gt-mid{color:var(--green)}.gt-high{color:var(--amber)}
+
+.rate-tabs{display:flex;gap:6px;margin-bottom:14px}
+.rate-tab{flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border);background:var(--s2);color:var(--sub);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;transition:all 0.15s}
+.rate-tab.active{background:#0a2e22;border-color:var(--green);color:var(--green)}
+
+.compound-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:8px 0}
+.cb-principal{background:var(--lhsc);height:100%}
+.cb-interest{background:var(--green);height:100%}
+.cb-legend{display:flex;gap:16px;margin-top:6px}
+.cb-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub)}
+.cb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.milestone-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.milestone-row:last-child{border-bottom:none}
+.ms-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
+.ms-info{flex:1}
+.ms-label{font-size:13px;font-weight:600}
+.ms-sub{font-size:11px;color:var(--sub);margin-top:2px}
+.ms-val{font-size:14px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
+
+.inv-apply-btn{width:100%;height:46px;border-radius:12px;border:none;background:var(--green);color:#000;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-top:12px}
+</style>
+
+<div class="inv-hero">
+  <div class="inv-hero-glow"></div>
+  <div class="inv-hero-label">💰 Investment fund this period</div>
+  <div class="inv-hero-amount" id="inv-amount">$0.00</div>
+  <div class="inv-hero-sub" id="inv-pct-label">20% of gross earnings</div>
+  <div class="inv-stats-row">
+    <div class="inv-stat"><div class="inv-stat-label">Saved so far</div><div class="inv-stat-val" id="inv-total-saved" style="color:var(--green)">$0</div></div>
+    <div class="inv-stat"><div class="inv-stat-label">Periods invested</div><div class="inv-stat-val" id="inv-periods-count">0</div></div>
+  </div>
+</div>
+
+<div class="inv-card">
+  <div class="inv-card-title">Investment settings</div>
+  <div class="inv-setting-row">
+    <div><div class="inv-setting-label">% of earnings to invest</div><div class="inv-setting-sub">Applied to combined gross pay</div></div>
+    <input class="inv-input" type="number" id="inv-pct" value="20" min="1" max="100" step="1" oninput="renderInvest()">
+  </div>
+  <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+    <div class="inv-setting-label" style="font-size:13px;margin-bottom:8px">Quick select</div>
+    <div class="inv-pct-group">
+      <button class="inv-pct-btn" onclick="setInvPct(10,this)">10%</button>
+      <button class="inv-pct-btn active" onclick="setInvPct(20,this)">20%</button>
+      <button class="inv-pct-btn" onclick="setInvPct(25,this)">25%</button>
+      <button class="inv-pct-btn" onclick="setInvPct(30,this)">30%</button>
+      <button class="inv-pct-btn" onclick="setInvPct(50,this)">50%</button>
+    </div>
+  </div>
+  <div class="inv-setting-row">
+    <div><div class="inv-setting-label">Monthly contribution</div><div class="inv-setting-sub">Or set a fixed amount</div></div>
+    <input class="inv-input" type="number" id="inv-monthly" placeholder="Auto" step="10" oninput="renderInvest()">
+  </div>
+  <div class="inv-setting-row">
+    <div><div class="inv-setting-label">Current savings ($)</div><div class="inv-setting-sub">Existing amount already invested</div></div>
+    <input class="inv-input" type="number" id="inv-existing" value="0" step="100" oninput="renderInvest()">
+  </div>
+</div>
+
+<div class="inv-card">
+  <div class="inv-card-title">Growth scenario</div>
+  <div class="rate-tabs">
+    <button class="rate-tab" onclick="setScenario('conservative',this)">Conservative<br><span style="font-size:10px;font-weight:400">4-5% / yr</span></button>
+    <button class="rate-tab active" onclick="setScenario('moderate',this)">Moderate<br><span style="font-size:10px;font-weight:400">7-8% / yr</span></button>
+    <button class="rate-tab" onclick="setScenario('aggressive',this)">Aggressive<br><span style="font-size:10px;font-weight:400">10-12% / yr</span></button>
+  </div>
+  <div class="inv-setting-row">
+    <div><div class="inv-setting-label">Annual return rate</div><div class="inv-setting-sub">Customize your expected return</div></div>
+    <div style="display:flex;align-items:center;gap:4px">
+      <input class="inv-input" type="number" id="inv-rate" value="7" step="0.5" min="0" max="50" oninput="renderInvest()" style="width:80px">
+      <span style="color:var(--sub);font-size:13px">%</span>
+    </div>
+  </div>
+</div>
+
+<div class="inv-card">
+  <div class="inv-card-title">Projected growth</div>
+  <table class="growth-table">
+    <thead><tr><th>Time</th><th class="gt-low">Low (4%)</th><th class="gt-mid">Target</th><th class="gt-high">High (12%)</th></tr></thead>
+    <tbody id="growth-tbody"></tbody>
+  </table>
+</div>
+
+<div class="inv-card">
+  <div class="inv-card-title">Compound breakdown at target rate</div>
+  <div id="compound-visual"></div>
+</div>
+
+<div class="inv-card">
+  <div class="inv-card-title">Milestones</div>
+  <div id="milestones"></div>
+</div>
+`;
+document.body.insertBefore(investPage, document.querySelector('.bottom-nav'));
+
+// ── Investment state ──────────────────────────────────────────────────────────
+const INV_KEY = 'pht_invest_v1';
+let invSettings = JSON.parse(localStorage.getItem(INV_KEY)||'null') || {pct:20, rate:7, scenario:'moderate', existing:0, monthly:null};
+let currentScenario = invSettings.scenario || 'moderate';
+
+function saveInv(){localStorage.setItem(INV_KEY,JSON.stringify(invSettings));}
+
+window.setInvPct = (pct, btn) => {
+  document.getElementById('inv-pct').value = pct;
+  document.querySelectorAll('.inv-pct-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  invSettings.pct = pct; saveInv(); renderInvest();
+};
+
+window.setScenario = (s, btn) => {
+  currentScenario = s; invSettings.scenario = s;
+  document.querySelectorAll('.rate-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const rates = {conservative:4.5, moderate:7, aggressive:11};
+  document.getElementById('inv-rate').value = rates[s];
+  invSettings.rate = rates[s]; saveInv(); renderInvest();
+};
+
+function calcFV(principal, monthly, rate, years){
+  const r = rate/100/12;
+  if(r === 0) return principal + monthly*years*12;
+  return principal*Math.pow(1+r,years*12) + monthly*(Math.pow(1+r,years*12)-1)/r;
+}
+
+window.renderInvest = () => {
+  // Get current gross
+  const lp=getCurrentPeriod('lhsc'), cp=getCurrentPeriod('craig');
+  const ls=summarize(getShifts('lhsc',lp.start)), cs=summarize(getShifts('craig',cp.start));
+  const gross = ls.gross + cs.gross;
+
+  const pct = parseFloat(document.getElementById('inv-pct').value)||20;
+  const rate = parseFloat(document.getElementById('inv-rate').value)||7;
+  const existing = parseFloat(document.getElementById('inv-existing').value)||0;
+  const manualMonthly = parseFloat(document.getElementById('inv-monthly').value)||null;
+
+  const periodInv = gross * (pct/100);
+  const monthlyInv = manualMonthly || (periodInv * 26 / 12);
+
+  invSettings.pct=pct; invSettings.rate=rate; invSettings.existing=existing; invSettings.monthly=manualMonthly;
+  saveInv();
+
+  // Hero
+  document.getElementById('inv-amount').textContent = '$'+periodInv.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('inv-pct-label').textContent = `${pct}% of $${gross.toFixed(2)} gross · ~$${monthlyInv.toFixed(0)}/mo`;
+
+  // Count all periods
+  let totalSaved = existing;
+  let periodsCount = 0;
+  ['lhsc','craig'].forEach(job=>{
+    Object.keys(allShifts).filter(k=>k.startsWith(job+'_')).forEach(k=>{
+      const s=summarize(allShifts[k]);
+      totalSaved += s.gross*(pct/100);
+      periodsCount++;
+    });
+  });
+  document.getElementById('inv-total-saved').textContent='$'+Math.round(totalSaved).toLocaleString('en-CA');
+  document.getElementById('inv-periods-count').textContent=periodsCount;
+
+  // Growth table
+  const timepoints = [
+    {label:'6 months',years:0.5},
+    {label:'1 year',years:1},
+    {label:'2 years',years:2},
+    {label:'3 years',years:3},
+    {label:'5 years',years:5},
+    {label:'10 years',years:10},
+    {label:'15 years',years:15},
+    {label:'20 years',years:20},
+    {label:'25 years',years:25},
+    {label:'30 years',years:30},
+  ];
+
+  const tbody = document.getElementById('growth-tbody');
+  tbody.innerHTML = timepoints.map(tp=>{
+    const low  = calcFV(existing, monthlyInv, 4,   tp.years);
+    const mid  = calcFV(existing, monthlyInv, rate, tp.years);
+    const high = calcFV(existing, monthlyInv, 12,  tp.years);
+    const fmtBig = n => {
+      if(n>=1000000) return '$'+(n/1000000).toFixed(2)+'M';
+      if(n>=1000) return '$'+Math.round(n/1000)+'K';
+      return '$'+Math.round(n);
+    };
+    return`<tr>
+      <td class="gt-year">${tp.label}</td>
+      <td class="gt-low">${fmtBig(low)}</td>
+      <td class="gt-mid">${fmtBig(mid)}</td>
+      <td class="gt-high">${fmtBig(high)}</td>
+    </tr>`;
+  }).join('');
+
+  // Compound visual at 5, 10, 20 years
+  const compEl = document.getElementById('compound-visual');
+  const checkpoints = [1,5,10,20];
+  compEl.innerHTML = checkpoints.map(y=>{
+    const fv = calcFV(existing, monthlyInv, rate, y);
+    const contributed = existing + monthlyInv*y*12;
+    const interest = Math.max(0, fv - contributed);
+    const intPct = fv>0?Math.round(interest/fv*100):0;
+    const prinPct = 100-intPct;
+    const fmtBig = n=>{if(n>=1000000)return'$'+(n/1000000).toFixed(1)+'M';if(n>=1000)return'$'+Math.round(n/1000)+'K';return'$'+Math.round(n);};
+    return`<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+        <span style="color:var(--sub);font-weight:600">${y} year${y>1?'s':''}</span>
+        <span style="color:var(--green);font-weight:700">${fmtBig(fv)}</span>
+      </div>
+      <div class="compound-bar">
+        <div class="cb-principal" style="width:${prinPct}%"></div>
+        <div class="cb-interest" style="width:${intPct}%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:3px">
+        <span>You put in: ${fmtBig(contributed)}</span>
+        <span style="color:var(--green)">Interest: ${fmtBig(interest)} (${intPct}%)</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Milestones
+  const milestones=[
+    {icon:'🌱',label:'First $1,000',target:1000},
+    {icon:'🎯',label:'$5,000 saved',target:5000},
+    {icon:'🏆',label:'$10,000 saved',target:10000},
+    {icon:'🚀',label:'$25,000 saved',target:25000},
+    {icon:'💎',label:'$50,000 saved',target:50000},
+    {icon:'🏠',label:'$100K milestone',target:100000},
+    {icon:'👑',label:'$250K milestone',target:250000},
+  ];
+
+  const msEl = document.getElementById('milestones');
+  msEl.innerHTML = milestones.map(m=>{
+    let yearsNeeded = null;
+    for(let y=0.1;y<=50;y+=0.1){
+      if(calcFV(existing,monthlyInv,rate,y)>=m.target){yearsNeeded=y;break;}
+    }
+    const current = calcFV(existing,monthlyInv,rate,0.001);
+    const done = current >= m.target;
+    const sub = done ? 'Already reached! 🎉' : yearsNeeded ? `~${yearsNeeded<1?(yearsNeeded*12).toFixed(0)+' months':(yearsNeeded).toFixed(1)+' years'} at ${rate}% return` : 'Beyond 50 year projection';
+    return`<div class="milestone-row">
+      <span class="ms-icon">${m.icon}</span>
+      <div class="ms-info">
+        <div class="ms-label">${m.label}</div>
+        <div class="ms-sub">${sub}</div>
+      </div>
+      <div class="ms-val">$${(m.target>=1000?Math.round(m.target/1000)+'K':m.target)}</div>
+    </div>`;
+  }).join('');
+};
+
+// Patch showPage to include invest
+const _origShowPage = window.showPage;
+window.showPage = (name) => {
+  _origShowPage(name);
+  if(name==='invest') renderInvest();
+};
+
+// Init invest settings from storage
+if(invSettings.rate) document.getElementById('inv-rate').value = invSettings.rate;
+if(invSettings.pct) document.getElementById('inv-pct').value = invSettings.pct;
+if(invSettings.existing) document.getElementById('inv-existing').value = invSettings.existing;
+</script>
