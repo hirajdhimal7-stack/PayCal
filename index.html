@@ -4,234 +4,254 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Hiraj — Pay Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#09090f;--s1:#111118;--s2:#1a1a24;--s3:#22222f;
-  --border:#2a2a38;--border2:#333345;
-  --text:#f0f0f8;--sub:#6b6b88;--muted:#3e3e55;
-  --lhsc:#5b8def;--lhscl:#131d35;--lhscb:#1e2d50;
-  --craig:#f07840;--craigl:#2a1508;--craigb:#3d1e08;
-  --green:#2dd4a0;--greenl:#0a2e22;
-  --red:#f16b6b;--redl:#2e0f0f;
-  --amber:#f5b944;--amberl:#2e2008;
-  --r:16px;--rs:12px;--rsm:8px;
-}
+:root{--bg:#09090f;--s1:#111118;--s2:#1a1a24;--s3:#22222f;--border:#2a2a38;--border2:#333345;--text:#f0f0f8;--sub:#6b6b88;--muted:#3e3e55;--lhsc:#5b8def;--lhscl:#131d35;--lhscb:#1e2d50;--craig:#f07840;--craigl:#2a1508;--craigb:#3d1e08;--green:#2dd4a0;--greenl:#0a2e22;--red:#f16b6b;--redl:#2e0f0f;--amber:#f5b944;--amberl:#2e2008;--r:16px;--rs:12px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:76px;overscroll-behavior:none}
-
-/* ── TOPBAR ── */
-.topbar{background:rgba(9,9,15,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 18px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
-.tb-left{display:flex;flex-direction:column}
-.tb-title{font-size:15px;font-weight:700;letter-spacing:-0.3px}
-.tb-date{font-size:11px;color:var(--sub);margin-top:1px}
-.tb-right{text-align:right}
-.tb-label{font-size:10px;color:var(--sub);letter-spacing:0.04em;text-transform:uppercase}
-.tb-amount{font-size:20px;font-weight:800;color:var(--green);letter-spacing:-0.5px;font-variant-numeric:tabular-nums}
-
-/* ── PAGES ── */
-.page{display:none;padding:16px;animation:fadeIn 0.2s ease}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:76px}
+.topbar{background:rgba(9,9,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 18px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.tb-title{font-size:15px;font-weight:700}.tb-date{font-size:11px;color:var(--sub);margin-top:1px}
+.tb-amount{font-size:20px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums}
+.tb-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:0.04em}
+.page{display:none;padding:14px;animation:fi 0.18s ease}
 .page.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
-/* ── BOTTOM NAV ── */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(17,17,24,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;height:68px;padding-bottom:env(safe-area-inset-bottom);z-index:200}
-.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;cursor:pointer;color:var(--sub);font-size:10px;font-weight:600;font-family:'Inter',sans-serif;letter-spacing:0.02em;transition:color 0.15s;padding:8px 4px}
-.bnav-btn .bi{font-size:22px;transition:transform 0.15s}
-.bnav-btn.active{color:var(--lhsc)}
-.bnav-btn.active .bi{transform:scale(1.1)}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(17,17,24,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;height:68px;padding-bottom:env(safe-area-inset-bottom);z-index:200}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:var(--sub);font-size:10px;font-weight:600;font-family:'Inter',sans-serif;transition:color 0.15s}
+.nb .bi{font-size:21px;transition:transform 0.15s}
+.nb.active{color:var(--lhsc)}.nb.active .bi{transform:scale(1.1)}
 
-/* ── JOB CARDS (home) ── */
+/* JOB HERO CARDS */
 .job-hero{border-radius:var(--r);padding:18px;margin-bottom:10px;position:relative;overflow:hidden}
-.job-hero.lhsc{background:linear-gradient(135deg,var(--lhscl) 0%,var(--lhscb) 100%);border:1px solid #1e3360}
-.job-hero.craig{background:linear-gradient(135deg,var(--craigl) 0%,var(--craigb) 100%);border:1px solid #4a2510}
-.jh-glow{position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;opacity:0.12;filter:blur(24px)}
+.job-hero.lhsc{background:linear-gradient(135deg,var(--lhscl),var(--lhscb));border:1px solid #1e3360}
+.job-hero.craig{background:linear-gradient(135deg,var(--craigl),var(--craigb));border:1px solid #4a2510}
+.jh-glow{position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;opacity:0.1;filter:blur(30px)}
 .jh-glow.lhsc{background:var(--lhsc)}.jh-glow.craig{background:var(--craig)}
-.jh-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.jh-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
 .jh-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em}
 .jh-name.lhsc{color:var(--lhsc)}.jh-name.craig{color:var(--craig)}
-.jh-period{font-size:11px;color:var(--sub);margin-top:3px}
-.jh-rate{font-size:11px;color:var(--sub);margin-top:2px}
-.jh-gross{font-size:32px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1}
+.jh-meta{font-size:11px;color:var(--sub);margin-top:3px}
+.jh-gross{font-size:30px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1}
 .jh-gross.lhsc{color:var(--lhsc)}.jh-gross.craig{color:var(--craig)}
-.jh-hrs{font-size:12px;color:var(--sub);margin-top:4px}
-.jh-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
-.jh-countdown{font-size:12px;font-weight:600}
-.jh-countdown.soon{color:var(--green)}.jh-countdown.close{color:var(--amber)}.jh-countdown.later{color:var(--sub)}
-.jh-payday{font-size:11px;color:var(--sub)}
-.progress-wrap{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:8px;overflow:hidden}
-.progress-bar{height:100%;border-radius:2px;transition:width 0.6s ease}
-.progress-bar.lhsc{background:var(--lhsc)}.progress-bar.craig{background:var(--craig)}
+.jh-hrs{font-size:11px;color:var(--sub);margin-top:3px}
+.jh-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)}
+.jh-cd{font-size:12px;font-weight:600}
+.jh-cd.soon{color:var(--green)}.jh-cd.close{color:var(--amber)}.jh-cd.later{color:var(--sub)}
+.prog-wrap{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:8px;overflow:hidden}
+.prog-bar{height:100%;border-radius:2px}
+.prog-bar.lhsc{background:var(--lhsc)}.prog-bar.craig{background:var(--craig)}
 
-/* ── COMBINED CARD ── */
-.combined-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:10px}
-.cc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);margin-bottom:14px}
-.cc-big{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.cc-gross-label{font-size:13px;color:var(--sub)}
-.cc-gross-val{font-size:28px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-0.5px}
-.cc-rows{display:flex;flex-direction:column;gap:8px}
-.cc-row{display:flex;justify-content:space-between;align-items:center}
-.cc-row-label{font-size:12px;color:var(--sub)}
-.cc-row-val{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
-.cc-divider{height:1px;background:var(--border);margin:8px 0}
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);margin-bottom:14px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:none}
+.row-label{font-size:12px;color:var(--sub)}
+.row-val{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.row-big{font-size:24px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums}
 
-/* ── LOG ── */
-.job-toggle{display:flex;background:var(--s2);border-radius:var(--r);padding:4px;gap:4px;margin-bottom:14px}
-.jt-btn{flex:1;padding:10px;border-radius:var(--rs);border:none;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;background:none;color:var(--sub);transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px}
-.jt-btn.active.lhsc{background:var(--lhscb);color:var(--lhsc)}
-.jt-btn.active.craig{background:var(--craigb);color:var(--craig)}
+/* JOB TOGGLE */
+.job-toggle{display:flex;background:var(--s2);border-radius:var(--r);padding:4px;gap:4px;margin-bottom:12px}
+.jt{flex:1;padding:10px;border-radius:var(--rs);border:none;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;background:none;color:var(--sub);transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.jt.active.lhsc{background:var(--lhscb);color:var(--lhsc)}.jt.active.craig{background:var(--craigb);color:var(--craig)}
 .jt-dot{width:7px;height:7px;border-radius:50%}
 .jt-dot.lhsc{background:var(--lhsc)}.jt-dot.craig{background:var(--craig)}
 
+/* LOG TABLE */
 .log-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
-.log-hdr{display:grid;grid-template-columns:78px 1fr 54px 70px 64px;gap:4px;padding:9px 14px;background:var(--s2);border-bottom:1px solid var(--border)}
+.log-hdr{display:grid;grid-template-columns:76px 1fr 52px 68px 60px;gap:4px;padding:9px 14px;background:var(--s2);border-bottom:1px solid var(--border)}
 .log-hdr span{font-size:10px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:0.05em}
 .log-hdr span:nth-child(3),.log-hdr span:nth-child(4){text-align:right}
-.log-hdr span:nth-child(5){text-align:center}
-.shift-row{display:grid;grid-template-columns:78px 1fr 54px 70px 64px;gap:4px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;transition:background 0.1s}
-.shift-row:last-child{border-bottom:none}
-.shift-row:hover{background:var(--s2)}
+.log-hdr span:last-child{text-align:center}
+.sr{display:grid;grid-template-columns:76px 1fr 52px 68px 60px;gap:4px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;transition:background 0.1s}
+.sr:last-child{border-bottom:none}
+.sr:hover{background:var(--s2)}
+.sr.editing{background:rgba(245,185,68,0.06);border-left:3px solid var(--amber)}
 .sr-date{font-size:12px;font-weight:500}
 .sr-type{font-size:11px;color:var(--sub)}
 .sr-hrs{font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
 .sr-pay{font-size:12px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
-.sr-actions{display:flex;gap:4px;justify-content:center}
-.icon-btn{background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;font-size:14px;line-height:1;transition:background 0.1s}
-.icon-btn.edit:hover{background:var(--lhscb);color:var(--lhsc)}
-.icon-btn.del:hover{background:var(--redl);color:var(--red)}
-.log-empty{padding:28px;text-align:center;color:var(--sub);font-size:13px}
-.log-footer{display:grid;grid-template-columns:repeat(4,1fr);padding:10px 14px;background:var(--s2);border-top:1px solid var(--border);gap:4px}
-.lf-col{text-align:center}
-.lf-label{font-size:10px;color:var(--sub);margin-bottom:3px}
-.lf-val{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.sr-btns{display:flex;gap:3px;justify-content:center}
+.ib{background:none;border:none;cursor:pointer;padding:4px 5px;border-radius:6px;font-size:13px;line-height:1;transition:background 0.1s}
+.ib.ed:hover{background:rgba(91,141,239,0.15);color:var(--lhsc)}
+.ib.dl:hover{background:var(--redl);color:var(--red)}
+.log-empty{padding:26px;text-align:center;color:var(--sub);font-size:13px}
+.log-foot{display:grid;grid-template-columns:repeat(4,1fr);padding:10px 14px;background:var(--s2);border-top:1px solid var(--border)}
+.lfc{text-align:center}
+.lfc-label{font-size:10px;color:var(--sub);margin-bottom:3px}
+.lfc-val{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
 
-/* ── ADD / EDIT FORM ── */
-.form-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
-.form-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.form-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em}
-.form-badge.lhsc{background:var(--lhscb);color:var(--lhsc)}.form-badge.craig{background:var(--craigb);color:var(--craig)}
-.form-badge.edit{background:var(--amberl);color:var(--amber)}
+/* FORM */
+.form-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px;transition:border-color 0.2s}
+.form-card.edit-mode{border-color:var(--amber)}
+.form-title{font-size:14px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fbadge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em}
+.fbadge.lhsc{background:var(--lhscb);color:var(--lhsc)}.fbadge.craig{background:var(--craigb);color:var(--craig)}.fbadge.edit{background:var(--amberl);color:var(--amber)}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .field label{font-size:11px;font-weight:600;color:var(--sub);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:0.04em}
 .field input,.field select{width:100%;height:44px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:15px;font-family:'Inter',sans-serif;padding:0 12px;background:var(--s2);color:var(--text);outline:none;transition:border-color 0.15s;-webkit-appearance:none}
 .field input:focus,.field select:focus{border-color:var(--lhsc)}
 .btn-row{display:flex;gap:8px}
-.form-btn{flex:1;height:46px;border-radius:var(--rs);border:none;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s}
-.form-btn:active{opacity:0.8}
-.form-btn.primary.lhsc{background:var(--lhsc);color:white}
-.form-btn.primary.craig{background:var(--craig);color:white}
-.form-btn.primary.edit{background:var(--amber);color:#000}
-.form-btn.cancel{background:var(--s3);color:var(--sub)}
+.fbtn{flex:1;height:46px;border-radius:var(--rs);border:none;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s}
+.fbtn:active{opacity:0.8}
+.fbtn.lhsc{background:var(--lhsc);color:white}.fbtn.craig{background:var(--craig);color:white}.fbtn.amber{background:var(--amber);color:#000}.fbtn.cancel{background:var(--s3);color:var(--sub)}
 
-/* ── HISTORY ── */
-.hist-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
-.hist-tab{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);background:var(--s1);color:var(--sub);transition:all 0.15s;font-family:'Inter',sans-serif}
-.hist-tab.active{background:var(--s3);color:var(--text);border-color:var(--border2)}
+/* HISTORY */
+.hist-filter{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+.hf-btn{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);background:var(--s1);color:var(--sub);transition:all 0.15s;font-family:'Inter',sans-serif}
+.hf-btn.active{background:var(--s3);color:var(--text);border-color:var(--border2)}
 
-.period-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
-.period-hdr{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:12px}
-.period-hdr:hover{background:var(--s2)}
-.ph-left .ph-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
-.ph-left .ph-dates{font-size:12px;color:var(--sub)}
-.ph-left .ph-payday{font-size:11px;color:var(--sub);margin-top:2px}
-.ph-right{text-align:right;flex-shrink:0}
+.pcard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.phdr{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;transition:background 0.1s}
+.phdr:hover{background:var(--s2)}
+.ph-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.ph-dates{font-size:12px;color:var(--sub)}
+.ph-payday{font-size:11px;color:var(--sub);margin-top:2px}
 .ph-gross{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
 .ph-gross.lhsc{color:var(--lhsc)}.ph-gross.craig{color:var(--craig)}
-.ph-hrs{font-size:11px;color:var(--sub);margin-top:3px}
-.period-body{border-top:1px solid var(--border);padding:12px 16px;display:none}
-.period-body.open{display:block}
-.period-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.psg-item{background:var(--s2);border-radius:var(--rsm);padding:10px;text-align:center}
+.ph-hrs{font-size:11px;color:var(--sub);margin-top:2px}
+.pbody{display:none;border-top:1px solid var(--border);padding:14px 16px}
+.pbody.open{display:block}
+.pstat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.psg{background:var(--s2);border-radius:10px;padding:10px;text-align:center}
 .psg-label{font-size:10px;color:var(--sub);margin-bottom:4px}
 .psg-val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
-.mini-shift{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
-.mini-shift:last-child{border-bottom:none}
-.ms-left{color:var(--sub)}
-.ms-pay{font-weight:600;font-variant-numeric:tabular-nums}
-.chevron{font-size:12px;color:var(--sub);transition:transform 0.2s}
+.hist-shift-row{display:grid;grid-template-columns:76px 1fr 52px 68px 60px;gap:4px;padding:9px 0;border-bottom:1px solid var(--border);align-items:center;font-size:12px}
+.hist-shift-row:last-child{border-bottom:none}
+.hist-shift-row:hover{background:var(--s2);border-radius:8px;padding-left:6px;padding-right:6px}
+.hist-empty{font-size:12px;color:var(--sub);padding:8px 0}
+.chevron{font-size:13px;color:var(--sub);transition:transform 0.2s;flex-shrink:0}
 .chevron.open{transform:rotate(90deg)}
+.curr-badge{font-size:10px;background:var(--greenl);color:var(--green);padding:2px 7px;border-radius:20px;font-weight:700}
+.hist-edit-btn{background:none;border:none;cursor:pointer;padding:4px 5px;border-radius:6px;font-size:13px;line-height:1;color:var(--sub);transition:background 0.1s}
+.hist-edit-btn:hover{background:rgba(91,141,239,0.15);color:var(--lhsc)}
+.hist-del-btn{background:none;border:none;cursor:pointer;padding:4px 5px;border-radius:6px;font-size:13px;line-height:1;color:var(--sub);transition:background 0.1s}
+.hist-del-btn:hover{background:var(--redl);color:var(--red)}
+.hist-btns{display:flex;gap:3px;justify-content:center}
 
-/* ── STATS ── */
+/* EDIT MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;align-items:flex-end}
+.modal-overlay.open{display:flex}
+.modal{background:var(--s1);border-radius:24px 24px 0 0;padding:20px 18px 36px;width:100%;max-height:90vh;overflow-y:auto;border-top:1px solid var(--border2)}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* STATS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.scard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px}
 .sc-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--sub);margin-bottom:8px}
 .sc-val{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-0.5px}
 .sc-sub{font-size:11px;color:var(--sub);margin-top:4px}
-.bar-chart{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.bchart{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
 .bc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--sub);margin-bottom:14px}
 .bc-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .bc-row:last-child{margin-bottom:0}
-.bc-label{font-size:11px;width:65px;flex-shrink:0;color:var(--sub)}
-.bc-bar-wrap{flex:1;height:8px;background:var(--s2);border-radius:4px;overflow:hidden}
-.bc-bar{height:100%;border-radius:4px;transition:width 0.6s ease}
-.bc-val{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;width:58px;text-align:right;flex-shrink:0}
+.bc-lbl{font-size:11px;width:60px;flex-shrink:0;color:var(--sub)}
+.bc-wrap{flex:1;height:7px;background:var(--s2);border-radius:4px;overflow:hidden}
+.bc-bar{height:100%;border-radius:4px;transition:width 0.5s ease}
+.bc-val{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;width:56px;text-align:right;flex-shrink:0}
 
-/* ── SETTINGS ── */
+/* INVEST */
+.inv-hero{background:linear-gradient(135deg,#0d1f12,#0a1a22);border:1px solid #1a3a2a;border-radius:var(--r);padding:18px;margin-bottom:10px;position:relative;overflow:hidden}
+.inv-glow{position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:var(--green);opacity:0.08;filter:blur(30px)}
+.inv-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--green);margin-bottom:6px}
+.inv-amount{font-size:36px;font-weight:800;color:var(--green);letter-spacing:-1.5px;font-variant-numeric:tabular-nums;line-height:1}
+.inv-sub{font-size:12px;color:var(--sub);margin-top:6px}
+.inv-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.inv-stat{background:rgba(0,0,0,0.3);border-radius:10px;padding:11px;text-align:center}
+.inv-stat-label{font-size:10px;color:var(--sub);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em}
+.inv-stat-val{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.pct-group{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pct-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--s2);color:var(--sub);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.15s}
+.pct-btn.active{background:var(--greenl);border-color:var(--green);color:var(--green)}
+.rate-tabs{display:flex;gap:6px;margin-bottom:14px}
+.rt{flex:1;padding:9px 4px;border-radius:10px;border:1.5px solid var(--border);background:var(--s2);color:var(--sub);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;transition:all 0.15s}
+.rt.active{background:var(--greenl);border-color:var(--green);color:var(--green)}
+.inv-input{height:40px;width:110px;border:1.5px solid var(--border);border-radius:10px;background:var(--s2);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:0 10px;outline:none;text-align:right;-webkit-appearance:none}
+.inv-input:focus{border-color:var(--green)}
+.gtable{width:100%;border-collapse:collapse;font-size:12px}
+.gtable th{text-align:left;color:var(--sub);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.07em;padding:7px 0;border-bottom:1px solid var(--border)}
+.gtable th:not(:first-child){text-align:right}
+.gtable td{padding:9px 0;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
+.gtable td:not(:first-child){text-align:right;font-weight:600}
+.gtable tr:last-child td{border-bottom:none}
+.gt-yr{font-size:11px;font-weight:700;color:var(--sub)}
+.gt-l{color:#8ab4f8}.gt-m{color:var(--green)}.gt-h{color:var(--amber)}
+.cbar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:6px 0}
+.cb-p{background:var(--lhsc)}.cb-i{background:var(--green)}
+.ms-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.ms-row:last-child{border-bottom:none}
+.ms-icon{font-size:20px;width:30px;text-align:center;flex-shrink:0}
+.ms-info{flex:1}
+.ms-label{font-size:13px;font-weight:600}
+.ms-sub{font-size:11px;color:var(--sub);margin-top:2px}
+.ms-val{font-size:13px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
+.save-btn{width:100%;height:46px;border-radius:var(--rs);border:none;background:var(--lhsc);color:white;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-top:4px}
+
+/* SETTINGS */
 .set-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
-.set-job-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:12px}
-.set-job-title.lhsc{color:var(--lhsc)}.set-job-title.craig{color:var(--craig)}.set-job-title.general{color:var(--sub)}
+.set-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:12px}
+.set-title.lhsc{color:var(--lhsc)}.set-title.craig{color:var(--craig)}.set-title.g{color:var(--sub)}
 .set-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
 .set-row:last-child{border-bottom:none}
 .set-label{font-size:13px;font-weight:500}
 .set-sub{font-size:11px;color:var(--sub);margin-top:2px}
-.set-input{height:38px;width:110px;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--s2);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:0 10px;outline:none;text-align:right;-webkit-appearance:none}
+.set-input{height:38px;width:115px;border:1.5px solid var(--border);border-radius:var(--rsm, 8px);background:var(--s2);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:0 10px;outline:none;text-align:right;-webkit-appearance:none}
 .set-input:focus{border-color:var(--lhsc)}
-.save-btn{width:100%;height:46px;border-radius:var(--rs);border:none;background:var(--lhsc);color:white;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-top:4px}
 
-/* ── MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;align-items:flex-end}
-.modal-overlay.open{display:flex}
-.modal{background:var(--s1);border-radius:24px 24px 0 0;padding:20px 18px 36px;width:100%;max-height:90vh;overflow-y:auto;border-top:1px solid var(--border)}
-.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
-.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+/* SYNC STATUS */
+.sync-bar{text-align:center;font-size:11px;padding:5px;letter-spacing:0.04em;font-weight:500}
+.sync-bar.connecting{background:var(--s2);color:var(--sub)}
+.sync-bar.live{background:var(--greenl);color:var(--green)}
+.sync-bar.offline{background:var(--redl);color:var(--red)}
 
-/* ── TOAST ── */
+/* TOAST */
 .toast{position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s2);border:1px solid var(--border2);color:var(--text);padding:11px 20px;border-radius:14px;font-size:13px;font-weight:500;z-index:999;transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
+<div class="sync-bar connecting" id="sync-bar">⏳ Connecting...</div>
+
 <div class="topbar">
-  <div class="tb-left">
-    <div class="tb-title">Pay Tracker</div>
-    <div class="tb-date" id="tb-date">—</div>
-  </div>
-  <div class="tb-right">
-    <div class="tb-label">Combined this period</div>
-    <div class="tb-amount" id="tb-amount">$0.00</div>
-  </div>
+  <div><div class="tb-title">Pay Tracker</div><div class="tb-date" id="tb-date">—</div></div>
+  <div style="text-align:right"><div class="tb-label">This period</div><div class="tb-amount" id="tb-amount">$0.00</div></div>
 </div>
 
 <!-- HOME -->
 <div class="page active" id="page-home">
   <div id="lhsc-hero"></div>
   <div id="craig-hero"></div>
-  <div class="combined-card" id="combined-card"></div>
+  <div class="card" id="combined-card"></div>
 </div>
 
 <!-- LOG -->
 <div class="page" id="page-log">
   <div class="job-toggle">
-    <button class="jt-btn lhsc active" id="jt-lhsc" onclick="switchJob('lhsc')"><span class="jt-dot lhsc"></span>LHSC</button>
-    <button class="jt-btn craig" id="jt-craig" onclick="switchJob('craig')"><span class="jt-dot craig"></span>Craigweil</button>
+    <button class="jt lhsc active" id="jt-lhsc" onclick="switchJob('lhsc')"><span class="jt-dot lhsc"></span>LHSC</button>
+    <button class="jt craig" id="jt-craig" onclick="switchJob('craig')"><span class="jt-dot craig"></span>Craigweil</button>
   </div>
   <div id="log-lhsc">
     <div class="log-card">
       <div class="log-hdr"><span>Date</span><span>Type</span><span>Hrs</span><span>Pay</span><span>Edit</span></div>
       <div id="lhsc-rows"></div>
-      <div class="log-footer">
-        <div class="lf-col"><div class="lf-label">Hours</div><div class="lf-val" id="lf-lhsc-hrs">0.00</div></div>
-        <div class="lf-col"><div class="lf-label">Regular</div><div class="lf-val" id="lf-lhsc-reg">$0</div></div>
-        <div class="lf-col"><div class="lf-label">OT/Prem</div><div class="lf-val" id="lf-lhsc-ot">$0</div></div>
-        <div class="lf-col"><div class="lf-label">Gross</div><div class="lf-val" style="color:var(--lhsc)" id="lf-lhsc-gross">$0</div></div>
+      <div class="log-foot">
+        <div class="lfc"><div class="lfc-label">Hours</div><div class="lfc-val" id="lf-lhsc-hrs">0.00</div></div>
+        <div class="lfc"><div class="lfc-label">Regular</div><div class="lfc-val" id="lf-lhsc-reg">$0</div></div>
+        <div class="lfc"><div class="lfc-label">OT/Prem</div><div class="lfc-val" id="lf-lhsc-ot">$0</div></div>
+        <div class="lfc"><div class="lfc-label">Gross</div><div class="lfc-val" style="color:var(--lhsc)" id="lf-lhsc-gross">$0</div></div>
       </div>
     </div>
-    <div class="form-card" id="lhsc-form-card">
-      <div class="form-title"><span id="lhsc-form-title">Add shift</span><span class="form-badge lhsc">LHSC</span><span class="form-badge edit" id="lhsc-edit-badge" style="display:none">Editing</span></div>
+    <div class="form-card" id="lhsc-form">
+      <div class="form-title">
+        <span id="lhsc-ftitle">Add shift</span>
+        <span class="fbadge lhsc">LHSC</span>
+        <span class="fbadge edit" id="lhsc-ebadge" style="display:none">Editing</span>
+      </div>
       <div class="f2">
         <div class="field"><label>Date</label><input type="date" id="lhsc-date"></div>
         <div class="field"><label>Type</label>
@@ -244,11 +264,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
           </select>
         </div>
         <div class="field"><label>Hours</label><input type="number" id="lhsc-hrs" placeholder="7.5" step="0.25" inputmode="decimal"></div>
-        <div class="field"><label>Extra pay ($)</label><input type="number" id="lhsc-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
+        <div class="field"><label>Extra ($)</label><input type="number" id="lhsc-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
       </div>
       <div class="btn-row">
-        <button class="form-btn cancel" id="lhsc-cancel-btn" onclick="cancelEdit('lhsc')" style="display:none">Cancel</button>
-        <button class="form-btn primary lhsc" id="lhsc-submit-btn" onclick="submitShift('lhsc')">+ Add shift</button>
+        <button class="fbtn cancel" id="lhsc-cancel" onclick="cancelEdit('lhsc')" style="display:none">Cancel</button>
+        <button class="fbtn lhsc" id="lhsc-submit" onclick="submitShift('lhsc')">+ Add shift</button>
       </div>
     </div>
   </div>
@@ -256,15 +276,19 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div class="log-card">
       <div class="log-hdr"><span>Date</span><span>Type</span><span>Hrs</span><span>Pay</span><span>Edit</span></div>
       <div id="craig-rows"></div>
-      <div class="log-footer">
-        <div class="lf-col"><div class="lf-label">Hours</div><div class="lf-val" id="lf-craig-hrs">0.00</div></div>
-        <div class="lf-col"><div class="lf-label">Regular</div><div class="lf-val" id="lf-craig-reg">$0</div></div>
-        <div class="lf-col"><div class="lf-label">OT/Prem</div><div class="lf-val" id="lf-craig-ot">$0</div></div>
-        <div class="lf-col"><div class="lf-label">Gross</div><div class="lf-val" style="color:var(--craig)" id="lf-craig-gross">$0</div></div>
+      <div class="log-foot">
+        <div class="lfc"><div class="lfc-label">Hours</div><div class="lfc-val" id="lf-craig-hrs">0.00</div></div>
+        <div class="lfc"><div class="lfc-label">Regular</div><div class="lfc-val" id="lf-craig-reg">$0</div></div>
+        <div class="lfc"><div class="lfc-label">OT/Prem</div><div class="lfc-val" id="lf-craig-ot">$0</div></div>
+        <div class="lfc"><div class="lfc-label">Gross</div><div class="lfc-val" style="color:var(--craig)" id="lf-craig-gross">$0</div></div>
       </div>
     </div>
-    <div class="form-card" id="craig-form-card">
-      <div class="form-title"><span id="craig-form-title">Add shift</span><span class="form-badge craig">Craigweil</span><span class="form-badge edit" id="craig-edit-badge" style="display:none">Editing</span></div>
+    <div class="form-card" id="craig-form">
+      <div class="form-title">
+        <span id="craig-ftitle">Add shift</span>
+        <span class="fbadge craig">Craigweil</span>
+        <span class="fbadge edit" id="craig-ebadge" style="display:none">Editing</span>
+      </div>
       <div class="f2">
         <div class="field"><label>Date</label><input type="date" id="craig-date"></div>
         <div class="field"><label>Type</label>
@@ -277,11 +301,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
           </select>
         </div>
         <div class="field"><label>Hours</label><input type="number" id="craig-hrs" placeholder="7.5" step="0.25" inputmode="decimal"></div>
-        <div class="field"><label>Extra pay ($)</label><input type="number" id="craig-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
+        <div class="field"><label>Extra ($)</label><input type="number" id="craig-extra" placeholder="0.00" step="0.01" inputmode="decimal"></div>
       </div>
       <div class="btn-row">
-        <button class="form-btn cancel" id="craig-cancel-btn" onclick="cancelEdit('craig')" style="display:none">Cancel</button>
-        <button class="form-btn primary craig" id="craig-submit-btn" onclick="submitShift('craig')">+ Add shift</button>
+        <button class="fbtn cancel" id="craig-cancel" onclick="cancelEdit('craig')" style="display:none">Cancel</button>
+        <button class="fbtn craig" id="craig-submit" onclick="submitShift('craig')">+ Add shift</button>
       </div>
     </div>
   </div>
@@ -289,37 +313,82 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <!-- HISTORY -->
 <div class="page" id="page-history">
-  <div class="hist-tabs">
-    <button class="hist-tab active" onclick="filterHistory('all',this)">All</button>
-    <button class="hist-tab" onclick="filterHistory('lhsc',this)">LHSC</button>
-    <button class="hist-tab" onclick="filterHistory('craig',this)">Craigweil</button>
+  <div class="hist-filter">
+    <button class="hf-btn active" onclick="setHistFilter('all',this)">All periods</button>
+    <button class="hf-btn" onclick="setHistFilter('lhsc',this)">LHSC only</button>
+    <button class="hf-btn" onclick="setHistFilter('craig',this)">Craigweil only</button>
   </div>
-  <div id="history-content"></div>
+  <div id="history-list"></div>
 </div>
 
 <!-- STATS -->
 <div class="page" id="page-stats">
   <div class="stats-grid" id="stats-grid"></div>
-  <div class="bar-chart" id="pay-chart"></div>
-  <div class="bar-chart" id="hrs-chart"></div>
+  <div class="bchart" id="pay-chart"></div>
+  <div class="bchart" id="hrs-chart"></div>
+</div>
+
+<!-- INVEST -->
+<div class="page" id="page-invest">
+  <div class="inv-hero">
+    <div class="inv-glow"></div>
+    <div class="inv-label">💰 Investment fund — this period</div>
+    <div class="inv-amount" id="inv-amount">$0.00</div>
+    <div class="inv-sub" id="inv-sub">20% of gross earnings</div>
+    <div class="inv-stats">
+      <div class="inv-stat"><div class="inv-stat-label">Est. saved so far</div><div class="inv-stat-val" style="color:var(--green)" id="inv-saved">$0</div></div>
+      <div class="inv-stat"><div class="inv-stat-label">Monthly equiv.</div><div class="inv-stat-val" id="inv-monthly-disp">$0</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Investment settings</div>
+    <div class="row"><div><div style="font-size:13px;font-weight:500">% of earnings to invest</div><div style="font-size:11px;color:var(--sub);margin-top:2px">Applied to combined gross</div></div><input class="inv-input" type="number" id="inv-pct" value="20" min="1" max="100" step="1" oninput="renderInvest()"></div>
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;font-weight:500;margin-bottom:8px">Quick select</div>
+      <div class="pct-group">
+        <button class="pct-btn" onclick="setInvPct(10,this)">10%</button>
+        <button class="pct-btn active" onclick="setInvPct(20,this)">20%</button>
+        <button class="pct-btn" onclick="setInvPct(25,this)">25%</button>
+        <button class="pct-btn" onclick="setInvPct(30,this)">30%</button>
+        <button class="pct-btn" onclick="setInvPct(50,this)">50%</button>
+      </div>
+    </div>
+    <div class="row"><div><div style="font-size:13px;font-weight:500">Existing savings ($)</div><div style="font-size:11px;color:var(--sub);margin-top:2px">Amount already invested</div></div><input class="inv-input" type="number" id="inv-existing" value="0" step="100" oninput="renderInvest()"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Growth scenario</div>
+    <div class="rate-tabs">
+      <button class="rt" onclick="setScenario('conservative',this)">Conservative<br><span style="font-size:10px;font-weight:400">4–5%/yr</span></button>
+      <button class="rt active" onclick="setScenario('moderate',this)">Moderate<br><span style="font-size:10px;font-weight:400">7–8%/yr</span></button>
+      <button class="rt" onclick="setScenario('aggressive',this)">Aggressive<br><span style="font-size:10px;font-weight:400">10–12%/yr</span></button>
+    </div>
+    <div class="row"><div><div style="font-size:13px;font-weight:500">Annual return rate</div></div>
+      <div style="display:flex;align-items:center;gap:4px"><input class="inv-input" type="number" id="inv-rate" value="7" step="0.5" min="0" max="50" oninput="renderInvest()" style="width:78px"><span style="color:var(--sub);font-size:13px">%</span></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-title">Projected growth</div>
+    <table class="gtable"><thead><tr><th>Period</th><th class="gt-l">Low 4%</th><th class="gt-m">Target</th><th class="gt-h">High 12%</th></tr></thead>
+    <tbody id="growth-body"></tbody></table>
+  </div>
+  <div class="card"><div class="card-title">Compound breakdown</div><div id="compound-vis"></div></div>
+  <div class="card"><div class="card-title">Milestones</div><div id="milestones"></div></div>
 </div>
 
 <!-- SETTINGS -->
 <div class="page" id="page-settings">
   <div class="set-card">
-    <div class="set-job-title lhsc">● LHSC</div>
+    <div class="set-title lhsc">● LHSC</div>
     <div class="set-row"><div><div class="set-label">Hourly rate</div></div><input class="set-input" type="number" id="s-lhsc-rate" value="27.01" step="0.01"></div>
-    <div class="set-row"><div><div class="set-label">Anchor start date</div><div class="set-sub">First day of your first period</div></div><input class="set-input" type="date" id="s-lhsc-anchor"></div>
-    <div class="set-row"><div><div class="set-label">Pay day offset (days)</div><div class="set-sub">Days after period ends → pay day</div></div><input class="set-input" type="number" id="s-lhsc-offset" value="6"></div>
+    <div class="set-row"><div><div class="set-label">First period start date</div><div class="set-sub">Anchor — all periods calculated from here</div></div><input class="set-input" type="date" id="s-lhsc-anchor"></div>
+    <div class="set-row"><div><div class="set-label">Pay day offset (days)</div><div class="set-sub">Days after period END until pay day</div></div><input class="set-input" type="number" id="s-lhsc-offset" value="6"></div>
   </div>
   <div class="set-card">
-    <div class="set-job-title craig">● Craigweil</div>
+    <div class="set-title craig">● Craigweil</div>
     <div class="set-row"><div><div class="set-label">Hourly rate</div></div><input class="set-input" type="number" id="s-craig-rate" value="26.00" step="0.01"></div>
-    <div class="set-row"><div><div class="set-label">Anchor start date</div><div class="set-sub">First day of your first period</div></div><input class="set-input" type="date" id="s-craig-anchor"></div>
-    <div class="set-row"><div><div class="set-label">Pay day offset (days)</div><div class="set-sub">Days after period ends → pay day</div></div><input class="set-input" type="number" id="s-craig-offset" value="5"></div>
+    <div class="set-row"><div><div class="set-label">First period start date</div><div class="set-sub">Anchor — all periods calculated from here</div></div><input class="set-input" type="date" id="s-craig-anchor"></div>
+    <div class="set-row"><div><div class="set-label">Pay day offset (days)</div><div class="set-sub">Days after period END until pay day</div></div><input class="set-input" type="number" id="s-craig-offset" value="5"></div>
   </div>
   <div class="set-card">
-    <div class="set-job-title general">Deductions per period</div>
+    <div class="set-title g">Deductions / period</div>
     <div class="set-row"><div><div class="set-label">Pension (before-tax)</div></div><input class="set-input" type="number" id="s-pension" value="147.63" step="0.01"></div>
     <div class="set-row"><div><div class="set-label">Union dues</div></div><input class="set-input" type="number" id="s-union" value="15.73" step="0.01"></div>
     <div class="set-row"><div><div class="set-label">After-tax deductions</div></div><input class="set-input" type="number" id="s-aftertax" value="170.81" step="0.01"></div>
@@ -327,75 +396,168 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <button class="save-btn" onclick="saveSettings()">Save settings</button>
 </div>
 
-<!-- BOTTOM NAV -->
-<div class="bottom-nav">
-  <button class="bnav-btn active" id="btn-home" onclick="showPage('home')"><span class="bi">🏠</span>Home</button>
-  <button class="bnav-btn" id="btn-log" onclick="showPage('log')"><span class="bi">⏱</span>Log</button>
-  <button class="bnav-btn" id="btn-history" onclick="showPage('history')"><span class="bi">📋</span>History</button>
-  <button class="bnav-btn" id="btn-stats" onclick="showPage('stats')"><span class="bi">📊</span>Stats</button>
-  <button class="bnav-btn" id="btn-settings" onclick="showPage('settings')"><span class="bi">⚙️</span>Setup</button>
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">
+      <span id="modal-title-text">Edit shift</span>
+      <span class="fbadge" id="modal-job-badge">—</span>
+      <span class="fbadge edit">Editing</span>
+    </div>
+    <div class="f2">
+      <div class="field"><label>Date</label><input type="date" id="modal-date"></div>
+      <div class="field"><label>Type</label>
+        <select id="modal-type">
+          <option value="Regular">Regular</option>
+          <option value="Eve prem">Evening prem</option>
+          <option value="Wknd prem">Weekend prem</option>
+          <option value="OT 1.5x">Overtime 1.5x</option>
+          <option value="Holiday">Holiday 1.5x</option>
+        </select>
+      </div>
+      <div class="field"><label>Hours</label><input type="number" id="modal-hrs" step="0.25" inputmode="decimal"></div>
+      <div class="field"><label>Extra ($)</label><input type="number" id="modal-extra" step="0.01" inputmode="decimal"></div>
+    </div>
+    <div class="btn-row" style="margin-top:4px">
+      <button class="fbtn cancel" onclick="closeModal()">Cancel</button>
+      <button class="fbtn amber" id="modal-save-btn" onclick="saveModal()">Save changes</button>
+    </div>
+  </div>
 </div>
 
+<div class="bnav">
+  <button class="nb active" id="btn-home" onclick="showPage('home')"><span class="bi">🏠</span>Home</button>
+  <button class="nb" id="btn-log" onclick="showPage('log')"><span class="bi">⏱</span>Log</button>
+  <button class="nb" id="btn-history" onclick="showPage('history')"><span class="bi">📋</span>History</button>
+  <button class="nb" id="btn-stats" onclick="showPage('stats')"><span class="bi">📊</span>Stats</button>
+  <button class="nb" id="btn-invest" onclick="showPage('invest')"><span class="bi">📈</span>Invest</button>
+  <button class="nb" id="btn-settings" onclick="showPage('settings')"><span class="bi">⚙️</span>Setup</button>
+</div>
 <div class="toast" id="toast"></div>
 
-<script>
-const SHIFTS_KEY = 'pht_shifts_v3';
-const SET_KEY    = 'pht_settings_v3';
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, setDoc, onSnapshot, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBCAxv-u1rlQLonW0HLSahbmJLXtuVfbEA",
+  authDomain: "budget-1385f.firebaseapp.com",
+  projectId: "budget-1385f",
+  storageBucket: "budget-1385f.firebasestorage.app",
+  messagingSenderId: "554876329471",
+  appId: "1:554876329471:web:53f3fb8bbb95f060ac1bca"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const DATA_DOC = doc(db, 'paytracker', 'hiraj');
+
+// ── Constants ─────────────────────────────────────────────────────────────────
 const PERIOD_DAYS = 14;
+const SET_KEY = 'pht_set_v4';
+const INV_KEY = 'pht_inv_v2';
 
 let settings = JSON.parse(localStorage.getItem(SET_KEY)||'null') || {
   lhsc:  {rate:27.01, anchor:'2025-08-21', offset:6},
   craig: {rate:26.00, anchor:'2025-08-17', offset:5},
   pension:147.63, union:15.73, aftertax:170.81
 };
-
-let allShifts = JSON.parse(localStorage.getItem(SHIFTS_KEY)||'{}');
+let allShifts = {};
+let invSettings = JSON.parse(localStorage.getItem(INV_KEY)||'null') || {pct:20, rate:7, existing:0};
 let activeJob = 'lhsc';
-let editState = {lhsc: null, craig: null}; // null or index being edited
 let histFilter = 'all';
+let editState = {lhsc:null, craig:null};
+let modalState = {job:null, periodStart:null, idx:null};
+let isSyncing = false;
+
+// ── Sync ──────────────────────────────────────────────────────────────────────
+function setSyncBar(s){
+  const b=document.getElementById('sync-bar');
+  if(s==='live'){b.className='sync-bar live';b.textContent='🟢 Synced across all your devices';}
+  else if(s==='offline'){b.className='sync-bar offline';b.textContent='🔴 Offline — data saved locally';}
+  else{b.className='sync-bar connecting';b.textContent='⏳ Syncing...';}
+}
+
+// Real-time listener
+onSnapshot(DATA_DOC, snap => {
+  if(snap.exists()){
+    const data = snap.data();
+    if(data.allShifts) allShifts = data.allShifts;
+    if(data.settings) settings = {...settings,...data.settings};
+    localStorage.setItem(SET_KEY, JSON.stringify(settings));
+  }
+  setSyncBar('live');
+  renderAll();
+}, err => {
+  console.error(err);
+  setSyncBar('offline');
+  renderAll();
+});
+
+async function pushToCloud(){
+  if(isSyncing) return;
+  isSyncing = true;
+  try {
+    await setDoc(DATA_DOC, {allShifts, settings, updatedAt: Date.now()}, {merge:true});
+  } catch(e){ console.error(e); }
+  isSyncing = false;
+}
 
 // ── Utils ─────────────────────────────────────────────────────────────────────
 const fmt  = n => '$'+Math.abs(n).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtS = n => '$'+Math.round(Math.abs(n)).toLocaleString('en-CA');
 const ds   = d => d.toISOString().split('T')[0];
-const fmtD = s => { const d=new Date(s+'T12:00:00'); return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'}); };
-const fmtMY= s => { const d=new Date(s+'T12:00:00'); return d.toLocaleDateString('en-CA',{month:'short',year:'numeric'}); };
+const fmtD = s => new Date(s+'T12:00:00').toLocaleDateString('en-CA',{month:'short',day:'numeric'});
 
 function daysUntil(s){
   const t=new Date(); t.setHours(0,0,0,0);
   return Math.round((new Date(s+'T00:00:00')-t)/86400000);
 }
 
-function getPeriodFor(job,date){
-  const anchor=new Date(settings[job].anchor+'T00:00:00');
-  const target=new Date(date+'T00:00:00');
-  const diff=Math.floor((target-anchor)/86400000);
-  const pn=Math.max(0,Math.floor(diff/PERIOD_DAYS));
-  const start=new Date(anchor); start.setDate(start.getDate()+pn*PERIOD_DAYS);
-  const end=new Date(start); end.setDate(end.getDate()+PERIOD_DAYS-1);
-  const payday=new Date(end); payday.setDate(payday.getDate()+settings[job].offset);
-  return {num:pn+1, start:ds(start), end:ds(end), payday:ds(payday)};
+// ── FIXED: Period calculation — start date is INCLUSIVE day 1 ─────────────────
+function getPeriodFor(job, date){
+  const anchor = new Date(settings[job].anchor + 'T00:00:00');
+  const target  = new Date(date + 'T00:00:00');
+  // diff in days from anchor to target
+  const diffDays = Math.floor((target - anchor) / 86400000);
+  // which period number (0-indexed), anchor itself = period 0
+  const pn = diffDays < 0 ? 0 : Math.floor(diffDays / PERIOD_DAYS);
+  // period start = anchor + pn*14 days
+  const start = new Date(anchor);
+  start.setDate(start.getDate() + pn * PERIOD_DAYS);
+  // period end = start + 13 days (14 days total, inclusive)
+  const end = new Date(start);
+  end.setDate(end.getDate() + PERIOD_DAYS - 1);
+  // pay day = end + offset days
+  const payday = new Date(end);
+  payday.setDate(payday.getDate() + settings[job].offset);
+  return { num: pn + 1, start: ds(start), end: ds(end), payday: ds(payday) };
 }
 
-function getCurrentPeriod(job){ return getPeriodFor(job,ds(new Date())); }
+function getCurrentPeriod(job){ return getPeriodFor(job, ds(new Date())); }
 
-function getShifts(job,pStart){ return allShifts[job+'_'+pStart]||[]; }
-function setShifts(job,pStart,s){ allShifts[job+'_'+pStart]=s; localStorage.setItem(SHIFTS_KEY,JSON.stringify(allShifts)); }
+function getShifts(job, pStart){ return allShifts[job+'_'+pStart] || []; }
+function setShifts(job, pStart, s){
+  allShifts[job+'_'+pStart] = s;
+  pushToCloud();
+}
 
-function calcPay(job,hrs,type,extra){
-  const rate=settings[job].rate;
-  const ot=type==='OT 1.5x'||type==='Holiday';
-  return hrs*rate*(ot?1.5:1)+(extra||0);
+function calcPay(job, hrs, type, extra){
+  const rate = settings[job].rate;
+  const ot = type==='OT 1.5x'||type==='Holiday';
+  return hrs * rate * (ot?1.5:1) + (extra||0);
 }
 
 function summarize(shifts){
-  let hrs=0,regPay=0,otPay=0;
+  let hrs=0, regPay=0, otPay=0;
   shifts.forEach(s=>{
-    hrs+=s.hrs;
+    hrs += s.hrs;
     if(s.type==='OT 1.5x'||s.type==='Holiday') otPay+=s.pay;
     else regPay+=s.pay;
   });
-  return {hrs,regPay,otPay,gross:regPay+otPay};
+  return {hrs, regPay, otPay, gross: regPay+otPay};
 }
 
 function calcTax(gross){
@@ -418,15 +580,24 @@ function progressPct(job){
   return Math.round(elapsed/total*100);
 }
 
-// ── Render ────────────────────────────────────────────────────────────────────
-function renderAll(){ renderHome(); renderLog(); renderHistory(); renderStats(); renderSettingsPage(); }
+function cdInfo(dateStr){
+  const d=daysUntil(dateStr);
+  if(d<0)  return{text:'✓ Paid',cls:'later'};
+  if(d===0) return{text:'🎉 PAY DAY TODAY!',cls:'soon'};
+  if(d===1) return{text:'💰 Pay day tomorrow',cls:'soon'};
+  if(d<=5)  return{text:`${d} days to pay day`,cls:'close'};
+  return{text:`${d} days to pay day`,cls:'later'};
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderAll(){ renderHome(); renderLog(); renderHistory(); renderStats(); }
 
 function renderHome(){
   ['lhsc','craig'].forEach(job=>{
     const p=getCurrentPeriod(job);
     const s=getShifts(job,p.start);
     const {hrs,gross}=summarize(s);
-    const cd=countdownInfo(p.payday);
+    const cd=cdInfo(p.payday);
     const pct=progressPct(job);
     const name=job==='lhsc'?'LHSC':'Craigweil';
     document.getElementById(job+'-hero').innerHTML=`
@@ -435,18 +606,18 @@ function renderHome(){
         <div class="jh-top">
           <div>
             <div class="jh-name ${job}">${name}</div>
-            <div class="jh-period">Period ${p.num} · ${fmtD(p.start)} – ${fmtD(p.end)}</div>
-            <div class="jh-rate">$${settings[job].rate.toFixed(2)}/hr</div>
+            <div class="jh-meta">Period ${p.num} · ${fmtD(p.start)} – ${fmtD(p.end)}</div>
+            <div class="jh-meta" style="margin-top:1px">$${settings[job].rate.toFixed(2)}/hr</div>
           </div>
           <div style="text-align:right">
             <div class="jh-gross ${job}">${fmt(gross)}</div>
-            <div class="jh-hrs">${hrs.toFixed(2)} hrs</div>
+            <div class="jh-hrs">${hrs.toFixed(2)} hrs logged</div>
           </div>
         </div>
-        <div class="progress-wrap"><div class="progress-bar ${job}" style="width:${pct}%"></div></div>
+        <div class="prog-wrap"><div class="prog-bar ${job}" style="width:${pct}%"></div></div>
         <div class="jh-bottom">
-          <div class="jh-countdown ${cd.cls}">${cd.text}</div>
-          <div class="jh-payday">Pay day ${fmtD(p.payday)}</div>
+          <div class="jh-cd ${cd.cls}">${cd.text}</div>
+          <div class="jh-meta">Pay day ${fmtD(p.payday)}</div>
         </div>
       </div>`;
   });
@@ -458,64 +629,45 @@ function renderHome(){
   const net=combined-tax-ded;
 
   document.getElementById('combined-card').innerHTML=`
-    <div class="cc-title">Combined this period</div>
-    <div class="cc-big"><span class="cc-gross-label">Total gross</span><span class="cc-gross-val">${fmt(combined)}</span></div>
-    <div class="cc-rows">
-      <div class="cc-row"><span class="cc-row-label">Est. tax (Ontario)</span><span class="cc-row-val" style="color:var(--red)">−${fmt(tax)}</span></div>
-      <div class="cc-row"><span class="cc-row-label">Deductions</span><span class="cc-row-val" style="color:var(--red)">−${fmt(ded)}</span></div>
-      <div class="cc-divider"></div>
-      <div class="cc-row"><span class="cc-row-label">Est. net take-home</span><span class="cc-row-val" style="color:var(--green);font-size:16px">${fmt(net)}</span></div>
-      <div class="cc-divider"></div>
-      <div class="cc-row"><span class="cc-row-label">LHSC hours</span><span class="cc-row-val" style="color:var(--lhsc)">${ls.hrs.toFixed(2)} hrs</span></div>
-      <div class="cc-row"><span class="cc-row-label">Craigweil hours</span><span class="cc-row-val" style="color:var(--craig)">${cs.hrs.toFixed(2)} hrs</span></div>
-      <div class="cc-row"><span class="cc-row-label">Total hours</span><span class="cc-row-val">${totalHrs.toFixed(2)} hrs</span></div>
-    </div>`;
+    <div class="card-title">Combined this period</div>
+    <div class="row"><span class="row-label">Total gross</span><span class="row-big">${fmt(combined)}</span></div>
+    <div class="row"><span class="row-label">Est. tax (Ontario)</span><span class="row-val" style="color:var(--red)">−${fmt(tax)}</span></div>
+    <div class="row"><span class="row-label">Deductions</span><span class="row-val" style="color:var(--red)">−${fmt(ded)}</span></div>
+    <div class="row"><span class="row-label">Est. net take-home</span><span class="row-val" style="color:var(--green);font-size:16px">${fmt(net)}</span></div>
+    <div class="row"><span class="row-label">LHSC hours</span><span class="row-val" style="color:var(--lhsc)">${ls.hrs.toFixed(2)} hrs</span></div>
+    <div class="row"><span class="row-label">Craigweil hours</span><span class="row-val" style="color:var(--craig)">${cs.hrs.toFixed(2)} hrs</span></div>
+    <div class="row"><span class="row-label">Total hours</span><span class="row-val">${totalHrs.toFixed(2)} hrs</span></div>`;
 
   document.getElementById('tb-amount').textContent=fmt(combined);
   document.getElementById('tb-date').textContent=new Date().toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
 
-  // Pay day notification (once per session)
   if(!sessionStorage.getItem('notif')){
     sessionStorage.setItem('notif','1');
     const lD=daysUntil(lp.payday), cD=daysUntil(cp.payday);
-    if(lD===0) showToast('🎉 LHSC pay day TODAY! '+fmt(ls.gross));
-    else if(cD===0) showToast('🎉 Craigweil pay day TODAY! '+fmt(cs.gross));
-    else if(lD===1) showToast('💰 LHSC pay day TOMORROW!');
-    else if(cD===1) showToast('💰 Craigweil pay day TOMORROW!');
-    else if(lD<=4||cD<=4) showToast('📅 Pay day coming soon — '+fmt(combined)+' earned');
+    if(lD===0) toast('🎉 LHSC pay day TODAY! '+fmt(ls.gross));
+    else if(cD===0) toast('🎉 Craigweil pay day TODAY! '+fmt(cs.gross));
+    else if(lD===1) toast('💰 LHSC pay day TOMORROW!');
+    else if(cD===1) toast('💰 Craigweil pay day TOMORROW!');
+    else if(lD<=4||cD<=4) toast('📅 Pay day soon — '+fmt(combined)+' earned');
   }
-}
-
-function countdownInfo(dateStr){
-  const d=daysUntil(dateStr);
-  if(d<0)  return {text:'✓ Paid',cls:'later'};
-  if(d===0) return {text:'🎉 PAY DAY TODAY!',cls:'soon'};
-  if(d===1) return {text:'💰 Pay day tomorrow',cls:'soon'};
-  if(d<=5)  return {text:`${d} days to pay day`,cls:'close'};
-  return {text:`${d} days to pay day`,cls:'later'};
 }
 
 function renderLog(){
   ['lhsc','craig'].forEach(job=>{
     const p=getCurrentPeriod(job);
     const shifts=getShifts(job,p.start);
-    const rowsEl=document.getElementById(job+'-rows');
-
-    if(!shifts.length){
-      rowsEl.innerHTML='<div class="log-empty">No shifts yet — add one below 👇</div>';
-    } else {
-      rowsEl.innerHTML=shifts.map((s,i)=>`
-        <div class="shift-row ${editState[job]===i?'':''}">
-          <span class="sr-date">${fmtD(s.date)}</span>
-          <span class="sr-type">${s.type}</span>
-          <span class="sr-hrs">${s.hrs.toFixed(2)}</span>
-          <span class="sr-pay">${fmt(s.pay)}</span>
-          <span class="sr-actions">
-            <button class="icon-btn edit" onclick="startEdit('${job}',${i})" title="Edit">✏️</button>
-            <button class="icon-btn del" onclick="delShift('${job}','${p.start}',${i})" title="Delete">×</button>
-          </span>
-        </div>`).join('');
-    }
+    const el=document.getElementById(job+'-rows');
+    el.innerHTML = shifts.length ? shifts.map((s,i)=>`
+      <div class="sr${editState[job]===i?' editing':''}">
+        <span class="sr-date">${fmtD(s.date)}</span>
+        <span class="sr-type">${s.type}</span>
+        <span class="sr-hrs">${s.hrs.toFixed(2)}</span>
+        <span class="sr-pay">${fmt(s.pay)}</span>
+        <span class="sr-btns">
+          <button class="ib ed" onclick="openModalEdit('${job}','${p.start}',${i})">✏️</button>
+          <button class="ib dl" onclick="delShift('${job}','${p.start}',${i})">×</button>
+        </span>
+      </div>`).join('') : '<div class="log-empty">No shifts yet — add one below 👇</div>';
 
     const {hrs,regPay,otPay,gross}=summarize(shifts);
     document.getElementById('lf-'+job+'-hrs').textContent=hrs.toFixed(2);
@@ -526,127 +678,329 @@ function renderLog(){
 }
 
 function renderHistory(){
-  const el=document.getElementById('history-content');
+  const el=document.getElementById('history-list');
   const jobs=histFilter==='all'?['lhsc','craig']:[histFilter];
-  const currentLHSC=getCurrentPeriod('lhsc').start;
-  const currentCraig=getCurrentPeriod('craig').start;
-
+  const curKeys={lhsc:getCurrentPeriod('lhsc').start, craig:getCurrentPeriod('craig').start};
   let periods=[];
-  jobs.forEach(job=>{
-    const cur=job==='lhsc'?currentLHSC:currentCraig;
-    Object.keys(allShifts).filter(k=>k.startsWith(job+'_')).forEach(k=>{
-      const start=k.replace(job+'_','');
-      const p=getPeriodFor(job,start);
-      periods.push({...p,job,isCurrent:start===cur});
-    });
-  });
 
-  // Also include current period
   jobs.forEach(job=>{
-    const cur=job==='lhsc'?currentLHSC:currentCraig;
+    // Get all stored period keys for this job
+    const stored = Object.keys(allShifts).filter(k=>k.startsWith(job+'_')).map(k=>({
+      job, start: k.replace(job+'_',''), stored:true
+    }));
+    periods.push(...stored);
+    // Always include current period even if no shifts yet
+    const cur=curKeys[job];
     if(!periods.find(p=>p.job===job&&p.start===cur)){
-      const p=getCurrentPeriod(job);
-      periods.push({...p,job,isCurrent:true});
+      periods.push({job, start:cur, stored:false});
     }
   });
 
+  // Deduplicate
+  periods = [...new Map(periods.map(p=>[p.job+'_'+p.start,p])).values()];
   periods.sort((a,b)=>b.start.localeCompare(a.start)||(a.job>b.job?1:-1));
 
   if(!periods.length){el.innerHTML='<div style="color:var(--sub);font-size:13px;padding:12px">No history yet</div>';return;}
 
   el.innerHTML=periods.map((p,i)=>{
+    const per=getPeriodFor(p.job,p.start);
     const shifts=getShifts(p.job,p.start);
     const {hrs,regPay,otPay,gross}=summarize(shifts);
+    const isCur=p.start===curKeys[p.job];
     const name=p.job==='lhsc'?'LHSC':'Craigweil';
     const color=p.job==='lhsc'?'var(--lhsc)':'var(--craig)';
-    const cd=p.isCurrent?'<span style="font-size:10px;background:var(--greenl);color:var(--green);padding:2px 8px;border-radius:20px;margin-left:6px;font-weight:700">Current</span>':'';
-    return`
-      <div class="period-card">
-        <div class="period-hdr" onclick="togglePeriod('ph${i}','chev${i}')">
-          <div class="ph-left">
-            <div class="ph-tag" style="color:${color}">${name} · Period ${p.num}${cd}</div>
-            <div class="ph-dates">${fmtD(p.start)} – ${fmtD(p.end)}</div>
-            <div class="ph-payday">Pay day: ${fmtD(p.payday)}</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="ph-right">
-              <div class="ph-gross ${p.job}">${fmt(gross)}</div>
-              <div class="ph-hrs">${hrs.toFixed(2)} hrs</div>
-            </div>
-            <span class="chevron" id="chev${i}">›</span>
-          </div>
+    const curBadge=isCur?'<span class="curr-badge">Current</span>':'';
+
+    const shiftRows=shifts.map((s,si)=>`
+      <div class="hist-shift-row">
+        <span style="color:var(--sub)">${fmtD(s.date)}</span>
+        <span style="color:var(--sub)">${s.type}</span>
+        <span style="text-align:right">${s.hrs.toFixed(2)}</span>
+        <span style="text-align:right;font-weight:600">${fmt(s.pay)}</span>
+        <div class="hist-btns">
+          <button class="hist-edit-btn" onclick="openModalEdit('${p.job}','${per.start}',${si})">✏️</button>
+          <button class="hist-del-btn" onclick="delShift('${p.job}','${per.start}',${si})">×</button>
         </div>
-        <div class="period-body" id="ph${i}">
-          <div class="period-stat-grid">
-            <div class="psg-item"><div class="psg-label">Gross</div><div class="psg-val" style="color:${color}">${fmt(gross)}</div></div>
-            <div class="psg-item"><div class="psg-label">Hours</div><div class="psg-val">${hrs.toFixed(2)}</div></div>
-            <div class="psg-item"><div class="psg-label">OT/Prem</div><div class="psg-val">${fmt(otPay)}</div></div>
-          </div>
-          ${shifts.length?shifts.map(s=>`
-            <div class="mini-shift">
-              <span class="ms-left">${fmtD(s.date)} · ${s.type}</span>
-              <span>${s.hrs.toFixed(2)} hrs</span>
-              <span class="ms-pay">${fmt(s.pay)}</span>
-            </div>`).join(''):'<div style="color:var(--sub);font-size:12px;padding:6px 0">No shifts logged</div>'}
+      </div>`).join('');
+
+    return`<div class="pcard">
+      <div class="phdr" onclick="togglePeriod('pb${i}','pc${i}')">
+        <div>
+          <div class="ph-tag" style="color:${color}">${name} · Period ${per.num} ${curBadge}</div>
+          <div class="ph-dates">${fmtD(per.start)} – ${fmtD(per.end)}</div>
+          <div class="ph-payday">Pay day: ${fmtD(per.payday)}</div>
         </div>
-      </div>`;
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="text-align:right">
+            <div class="ph-gross ${p.job}">${fmt(gross)}</div>
+            <div class="ph-hrs">${hrs.toFixed(2)} hrs · ${shifts.length} shifts</div>
+          </div>
+          <span class="chevron" id="pc${i}">›</span>
+        </div>
+      </div>
+      <div class="pbody" id="pb${i}">
+        <div class="pstat-grid">
+          <div class="psg"><div class="psg-label">Gross</div><div class="psg-val" style="color:${color}">${fmt(gross)}</div></div>
+          <div class="psg"><div class="psg-label">Hours</div><div class="psg-val">${hrs.toFixed(2)}</div></div>
+          <div class="psg"><div class="psg-label">OT/Prem</div><div class="psg-val">${fmt(otPay)}</div></div>
+        </div>
+        ${shifts.length?`<div class="log-hdr" style="border-radius:8px 8px 0 0"><span>Date</span><span>Type</span><span>Hrs</span><span>Pay</span><span>Edit</span></div>${shiftRows}`:'<div class="hist-empty">No shifts logged for this period</div>'}
+      </div>
+    </div>`;
   }).join('');
 }
 
 function renderStats(){
-  // Gather all period data
-  let totalGross=0,totalHrs=0,periods=[];
-  const jobs=['lhsc','craig'];
-  jobs.forEach(job=>{
+  let allP=[];
+  ['lhsc','craig'].forEach(job=>{
     Object.keys(allShifts).filter(k=>k.startsWith(job+'_')).forEach(k=>{
       const start=k.replace(job+'_','');
-      const shifts=getShifts(job,start);
-      const {hrs,gross}=summarize(shifts);
+      const s=summarize(allShifts[k]);
       const p=getPeriodFor(job,start);
-      totalGross+=gross; totalHrs+=hrs;
-      periods.push({job,start,hrs,gross,payday:p.payday,num:p.num});
+      allP.push({job,start,...s,payday:p.payday,num:p.num});
     });
     const cur=getCurrentPeriod(job);
-    if(!allShifts[job+'_'+cur.start]){
-      const {hrs,gross}=summarize(getShifts(job,cur.start));
-      totalGross+=gross; totalHrs+=hrs;
-      periods.push({job,start:cur.start,hrs,gross,payday:cur.payday,num:cur.num});
+    if(!allP.find(p=>p.job===job&&p.start===cur.start)){
+      const s=summarize(getShifts(job,cur.start));
+      allP.push({job,start:cur.start,...s,payday:cur.payday,num:cur.num});
     }
   });
 
-  const lhscGross=periods.filter(p=>p.job==='lhsc').reduce((s,p)=>s+p.gross,0);
-  const craigGross=periods.filter(p=>p.job==='craig').reduce((s,p)=>s+p.gross,0);
-  const lhscHrs=periods.filter(p=>p.job==='lhsc').reduce((s,p)=>s+p.hrs,0);
-  const craigHrs=periods.filter(p=>p.job==='craig').reduce((s,p)=>s+p.hrs,0);
+  const totGross=allP.reduce((s,p)=>s+p.gross,0);
+  const totHrs=allP.reduce((s,p)=>s+p.hrs,0);
+  const lhscG=allP.filter(p=>p.job==='lhsc').reduce((s,p)=>s+p.gross,0);
+  const craigG=allP.filter(p=>p.job==='craig').reduce((s,p)=>s+p.gross,0);
+  const lhscH=allP.filter(p=>p.job==='lhsc').reduce((s,p)=>s+p.hrs,0);
+  const craigH=allP.filter(p=>p.job==='craig').reduce((s,p)=>s+p.hrs,0);
 
   document.getElementById('stats-grid').innerHTML=`
-    <div class="stat-card"><div class="sc-label">Total earned</div><div class="sc-val" style="color:var(--green)">${fmt(totalGross)}</div><div class="sc-sub">All periods combined</div></div>
-    <div class="stat-card"><div class="sc-label">Total hours</div><div class="sc-val">${totalHrs.toFixed(1)}</div><div class="sc-sub">Both jobs logged</div></div>
-    <div class="stat-card"><div class="sc-label">LHSC total</div><div class="sc-val" style="color:var(--lhsc)">${fmt(lhscGross)}</div><div class="sc-sub">${lhscHrs.toFixed(1)} hrs</div></div>
-    <div class="stat-card"><div class="sc-label">Craigweil total</div><div class="sc-val" style="color:var(--craig)">${fmt(craigGross)}</div><div class="sc-sub">${craigHrs.toFixed(1)} hrs</div></div>`;
+    <div class="scard"><div class="sc-label">Total earned</div><div class="sc-val" style="color:var(--green)">${fmt(totGross)}</div><div class="sc-sub">All periods</div></div>
+    <div class="scard"><div class="sc-label">Total hours</div><div class="sc-val">${totHrs.toFixed(1)}</div><div class="sc-sub">Both jobs</div></div>
+    <div class="scard"><div class="sc-label">LHSC total</div><div class="sc-val" style="color:var(--lhsc)">${fmt(lhscG)}</div><div class="sc-sub">${lhscH.toFixed(1)} hrs</div></div>
+    <div class="scard"><div class="sc-label">Craigweil total</div><div class="sc-val" style="color:var(--craig)">${fmt(craigG)}</div><div class="sc-sub">${craigH.toFixed(1)} hrs</div></div>`;
 
-  // Pay chart — recent periods
-  const recent=periods.sort((a,b)=>b.start.localeCompare(a.start)).slice(0,8).reverse();
+  const recent=allP.sort((a,b)=>b.start.localeCompare(a.start)).slice(0,8).reverse();
   const maxG=Math.max(...recent.map(p=>p.gross),1);
-  document.getElementById('pay-chart').innerHTML=`
-    <div class="bc-title">Gross pay by period</div>
-    ${recent.map(p=>`
-      <div class="bc-row">
-        <span class="bc-label" style="color:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}">${p.job==='lhsc'?'LHSC':'Craig'} ${p.num}</span>
-        <div class="bc-bar-wrap"><div class="bc-bar" style="width:${(p.gross/maxG*100).toFixed(0)}%;background:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}"></div></div>
-        <span class="bc-val">${fmtS(p.gross)}</span>
-      </div>`).join('')}`;
-
   const maxH=Math.max(...recent.map(p=>p.hrs),1);
-  document.getElementById('hrs-chart').innerHTML=`
-    <div class="bc-title">Hours by period</div>
-    ${recent.map(p=>`
-      <div class="bc-row">
-        <span class="bc-label" style="color:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}">${p.job==='lhsc'?'LHSC':'Craig'} ${p.num}</span>
-        <div class="bc-bar-wrap"><div class="bc-bar" style="width:${(p.hrs/maxH*100).toFixed(0)}%;background:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}"></div></div>
-        <span class="bc-val">${p.hrs.toFixed(1)}h</span>
-      </div>`).join('')}`;
+
+  document.getElementById('pay-chart').innerHTML=`<div class="bc-title">Gross pay by period</div>`+
+    recent.map(p=>`<div class="bc-row">
+      <span class="bc-lbl" style="color:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}">${p.job==='lhsc'?'LHSC':'Craig'} ${p.num}</span>
+      <div class="bc-wrap"><div class="bc-bar" style="width:${(p.gross/maxG*100).toFixed(0)}%;background:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}"></div></div>
+      <span class="bc-val">${fmtS(p.gross)}</span></div>`).join('');
+
+  document.getElementById('hrs-chart').innerHTML=`<div class="bc-title">Hours by period</div>`+
+    recent.map(p=>`<div class="bc-row">
+      <span class="bc-lbl" style="color:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}">${p.job==='lhsc'?'LHSC':'Craig'} ${p.num}</span>
+      <div class="bc-wrap"><div class="bc-bar" style="width:${(p.hrs/maxH*100).toFixed(0)}%;background:${p.job==='lhsc'?'var(--lhsc)':'var(--craig)'}"></div></div>
+      <span class="bc-val">${p.hrs.toFixed(1)}h</span></div>`).join('');
 }
+
+// ── EDIT MODAL (works for any period including history) ────────────────────────
+window.openModalEdit = (job, periodStart, idx) => {
+  const shifts=getShifts(job, periodStart);
+  const s=shifts[idx];
+  modalState={job, periodStart, idx};
+  document.getElementById('modal-date').value=s.date;
+  document.getElementById('modal-type').value=s.type;
+  document.getElementById('modal-hrs').value=s.hrs;
+  document.getElementById('modal-extra').value=s.extra||0;
+  document.getElementById('modal-title-text').textContent=`Edit shift`;
+  const badge=document.getElementById('modal-job-badge');
+  badge.className=`fbadge ${job}`;
+  badge.textContent=job==='lhsc'?'LHSC':'Craigweil';
+  document.getElementById('edit-modal').classList.add('open');
+};
+
+window.closeModal = () => {
+  document.getElementById('edit-modal').classList.remove('open');
+  modalState={job:null, periodStart:null, idx:null};
+};
+
+window.saveModal = () => {
+  const {job,periodStart,idx}=modalState;
+  if(job===null) return;
+  const date=document.getElementById('modal-date').value;
+  const type=document.getElementById('modal-type').value;
+  const hrs=parseFloat(document.getElementById('modal-hrs').value);
+  const extra=parseFloat(document.getElementById('modal-extra').value)||0;
+  if(!date||!hrs||hrs<=0){toast('Fill in all fields');return;}
+  const shifts=getShifts(job,periodStart);
+  shifts[idx]={date,type,hrs,pay:calcPay(job,hrs,type,extra),extra};
+  shifts.sort((a,b)=>a.date.localeCompare(b.date));
+  setShifts(job,periodStart,shifts);
+  closeModal();
+  renderAll();
+  toast('✓ Shift updated');
+};
+
+// Close modal on overlay click
+document.getElementById('edit-modal').addEventListener('click', e=>{
+  if(e.target===e.currentTarget) closeModal();
+});
+
+// ── SHIFT ACTIONS ─────────────────────────────────────────────────────────────
+window.submitShift = (job) => {
+  const date=document.getElementById(job+'-date').value;
+  const type=document.getElementById(job+'-type').value;
+  const hrs=parseFloat(document.getElementById(job+'-hrs').value);
+  const extra=parseFloat(document.getElementById(job+'-extra').value)||0;
+  if(!date){toast('Pick a date');return;}
+  if(!hrs||hrs<=0){toast('Enter hours');return;}
+  const p=getPeriodFor(job,date);
+  const pay=calcPay(job,hrs,type,extra);
+  const shifts=getShifts(job,p.start);
+  shifts.push({date,type,hrs,pay,extra});
+  shifts.sort((a,b)=>a.date.localeCompare(b.date));
+  setShifts(job,p.start,shifts);
+  document.getElementById(job+'-hrs').value='';
+  document.getElementById(job+'-extra').value='';
+  renderAll();
+  toast('✓ Shift added — '+fmt(pay));
+};
+
+window.delShift = (job, periodStart, idx) => {
+  if(!confirm('Remove this shift?')) return;
+  const shifts=getShifts(job,periodStart);
+  shifts.splice(idx,1);
+  setShifts(job,periodStart,shifts);
+  renderAll();
+  toast('Shift removed');
+};
+
+window.cancelEdit = (job) => {
+  editState[job]=null;
+  const fc=document.getElementById(job+'-form');
+  fc.classList.remove('edit-mode');
+  document.getElementById(job+'-date').value=ds(new Date());
+  document.getElementById(job+'-hrs').value='';
+  document.getElementById(job+'-extra').value='';
+  document.getElementById(job+'-ftitle').textContent='Add shift';
+  document.getElementById(job+'-ebadge').style.display='none';
+  document.getElementById(job+'-submit').textContent='+ Add shift';
+  document.getElementById(job+'-submit').className=`fbtn ${job}`;
+  document.getElementById(job+'-cancel').style.display='none';
+};
+
+// ── INVEST ────────────────────────────────────────────────────────────────────
+function calcFV(principal, monthly, rate, years){
+  const r=rate/100/12;
+  if(r===0) return principal+monthly*years*12;
+  return principal*Math.pow(1+r,years*12)+monthly*(Math.pow(1+r,years*12)-1)/r;
+}
+
+window.renderInvest = () => {
+  const lp=getCurrentPeriod('lhsc'), cp=getCurrentPeriod('craig');
+  const ls=summarize(getShifts('lhsc',lp.start)), cs=summarize(getShifts('craig',cp.start));
+  const gross=ls.gross+cs.gross;
+  const pct=parseFloat(document.getElementById('inv-pct').value)||20;
+  const rate=parseFloat(document.getElementById('inv-rate').value)||7;
+  const existing=parseFloat(document.getElementById('inv-existing').value)||0;
+  const periodInv=gross*(pct/100);
+  const monthly=periodInv*26/12;
+  invSettings={pct,rate,existing};
+  localStorage.setItem(INV_KEY,JSON.stringify(invSettings));
+
+  document.getElementById('inv-amount').textContent=fmt(periodInv);
+  document.getElementById('inv-sub').textContent=`${pct}% of ${fmt(gross)} gross · ~${fmt(monthly)}/mo`;
+
+  let saved=existing;
+  Object.keys(allShifts).forEach(k=>{
+    saved+=summarize(allShifts[k]).gross*(pct/100);
+  });
+  document.getElementById('inv-saved').textContent=fmt(saved);
+  document.getElementById('inv-monthly-disp').textContent=fmt(monthly);
+
+  const pts=[{l:'6 months',y:.5},{l:'1 year',y:1},{l:'2 years',y:2},{l:'3 years',y:3},{l:'5 years',y:5},{l:'10 years',y:10},{l:'15 years',y:15},{l:'20 years',y:20},{l:'30 years',y:30}];
+  const fmtB=n=>n>=1e6?'$'+(n/1e6).toFixed(2)+'M':n>=1000?'$'+Math.round(n/1000)+'K':'$'+Math.round(n);
+  document.getElementById('growth-body').innerHTML=pts.map(pt=>{
+    const l=calcFV(existing,monthly,4,pt.y), m=calcFV(existing,monthly,rate,pt.y), h=calcFV(existing,monthly,12,pt.y);
+    return`<tr><td class="gt-yr">${pt.l}</td><td class="gt-l">${fmtB(l)}</td><td class="gt-m">${fmtB(m)}</td><td class="gt-h">${fmtB(h)}</td></tr>`;
+  }).join('');
+
+  document.getElementById('compound-vis').innerHTML=[1,5,10,20].map(y=>{
+    const fv=calcFV(existing,monthly,rate,y);
+    const contrib=existing+monthly*y*12;
+    const interest=Math.max(0,fv-contrib);
+    const ip=fv>0?Math.round(interest/fv*100):0;
+    return`<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+        <span style="color:var(--sub);font-weight:600">${y} year${y>1?'s':''}</span>
+        <span style="color:var(--green);font-weight:700">${fmtB(fv)}</span>
+      </div>
+      <div class="cbar"><div class="cb-p" style="width:${100-ip}%"></div><div class="cb-i" style="width:${ip}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:3px">
+        <span>Put in: ${fmtB(contrib)}</span>
+        <span style="color:var(--green)">Growth: ${fmtB(interest)} (${ip}%)</span>
+      </div></div>`;
+  }).join('');
+
+  const milestones=[{i:'🌱',l:'First $1,000',t:1000},{i:'🎯',l:'$5K saved',t:5000},{i:'🏆',l:'$10K saved',t:10000},{i:'🚀',l:'$25K saved',t:25000},{i:'💎',l:'$50K saved',t:50000},{i:'🏠',l:'$100K milestone',t:100000},{i:'👑',l:'$250K milestone',t:250000}];
+  document.getElementById('milestones').innerHTML=milestones.map(m=>{
+    let yr=null;
+    for(let y=.1;y<=50;y+=.1){ if(calcFV(existing,monthly,rate,y)>=m.t){yr=y;break;} }
+    const done=calcFV(existing,monthly,rate,.001)>=m.t;
+    const sub=done?'Already reached! 🎉':yr?`~${yr<1?(yr*12).toFixed(0)+' months':yr.toFixed(1)+' years'} at ${rate}% return`:'Beyond 50yr projection';
+    return`<div class="ms-row"><span class="ms-icon">${m.i}</span><div class="ms-info"><div class="ms-label">${m.l}</div><div class="ms-sub">${sub}</div></div><div class="ms-val">${fmtB(m.t)}</div></div>`;
+  }).join('');
+};
+
+window.setInvPct=(pct,btn)=>{
+  document.getElementById('inv-pct').value=pct;
+  document.querySelectorAll('.pct-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderInvest();
+};
+window.setScenario=(s,btn)=>{
+  document.querySelectorAll('.rt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const rates={conservative:4.5,moderate:7,aggressive:11};
+  document.getElementById('inv-rate').value=rates[s];
+  renderInvest();
+};
+
+// ── UI ────────────────────────────────────────────────────────────────────────
+window.togglePeriod=(id,chevId)=>{
+  document.getElementById(id).classList.toggle('open');
+  document.getElementById(chevId).classList.toggle('open');
+};
+window.setHistFilter=(f,btn)=>{
+  histFilter=f;
+  document.querySelectorAll('.hf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory();
+};
+window.switchJob=(job)=>{
+  activeJob=job;
+  document.getElementById('log-lhsc').style.display=job==='lhsc'?'block':'none';
+  document.getElementById('log-craig').style.display=job==='craig'?'block':'none';
+  document.getElementById('jt-lhsc').className='jt lhsc'+(job==='lhsc'?' active':'');
+  document.getElementById('jt-craig').className='jt craig'+(job==='craig'?' active':'');
+};
+window.showPage=(name)=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.getElementById('btn-'+name).classList.add('active');
+  if(name==='invest') renderInvest();
+  else renderAll();
+};
+
+window.saveSettings=()=>{
+  settings.lhsc.rate=parseFloat(document.getElementById('s-lhsc-rate').value)||27.01;
+  settings.lhsc.anchor=document.getElementById('s-lhsc-anchor').value;
+  settings.lhsc.offset=parseInt(document.getElementById('s-lhsc-offset').value)||6;
+  settings.craig.rate=parseFloat(document.getElementById('s-craig-rate').value)||26.00;
+  settings.craig.anchor=document.getElementById('s-craig-anchor').value;
+  settings.craig.offset=parseInt(document.getElementById('s-craig-offset').value)||5;
+  settings.pension=parseFloat(document.getElementById('s-pension').value)||0;
+  settings.union=parseFloat(document.getElementById('s-union').value)||0;
+  settings.aftertax=parseFloat(document.getElementById('s-aftertax').value)||0;
+  localStorage.setItem(SET_KEY,JSON.stringify(settings));
+  pushToCloud();
+  renderAll();
+  toast('✓ Settings saved & synced');
+};
 
 function renderSettingsPage(){
   document.getElementById('s-lhsc-rate').value=settings.lhsc.rate;
@@ -660,443 +1014,17 @@ function renderSettingsPage(){
   document.getElementById('s-aftertax').value=settings.aftertax;
 }
 
-// ── Edit functionality ────────────────────────────────────────────────────────
-window.startEdit = (job, idx) => {
-  const p=getCurrentPeriod(job);
-  const shifts=getShifts(job,p.start);
-  const s=shifts[idx];
-  editState[job]=idx;
-
-  document.getElementById(job+'-date').value=s.date;
-  document.getElementById(job+'-type').value=s.type;
-  document.getElementById(job+'-hrs').value=s.hrs;
-  document.getElementById(job+'-extra').value=s.extra||0;
-
-  document.getElementById(job+'-form-title').textContent='Edit shift';
-  document.getElementById(job+'-edit-badge').style.display='inline-flex';
-  document.getElementById(job+'-submit-btn').textContent='Save changes';
-  document.getElementById(job+'-submit-btn').className='form-btn primary edit';
-  document.getElementById(job+'-cancel-btn').style.display='block';
-
-  // Switch to that job's tab if needed
-  switchJob(job);
-  showPage('log');
-
-  // Scroll to form
-  setTimeout(()=>document.getElementById(job+'-form-card').scrollIntoView({behavior:'smooth',block:'center'}),100);
-};
-
-window.cancelEdit = (job) => {
-  editState[job]=null;
-  document.getElementById(job+'-date').value=ds(new Date());
-  document.getElementById(job+'-hrs').value='';
-  document.getElementById(job+'-extra').value='';
-  document.getElementById(job+'-form-title').textContent='Add shift';
-  document.getElementById(job+'-edit-badge').style.display='none';
-  document.getElementById(job+'-submit-btn').textContent='+ Add shift';
-  document.getElementById(job+'-submit-btn').className=`form-btn primary ${job}`;
-  document.getElementById(job+'-cancel-btn').style.display='none';
-};
-
-window.submitShift = (job) => {
-  const date=document.getElementById(job+'-date').value;
-  const type=document.getElementById(job+'-type').value;
-  const hrs=parseFloat(document.getElementById(job+'-hrs').value);
-  const extra=parseFloat(document.getElementById(job+'-extra').value)||0;
-  if(!date){showToast('Pick a date');return;}
-  if(!hrs||hrs<=0){showToast('Enter hours');return;}
-  const p=getPeriodFor(job,date);
-  const pay=calcPay(job,hrs,type,extra);
-  const shifts=getShifts(job,p.start);
-
-  if(editState[job]!==null){
-    shifts[editState[job]]={date,type,hrs,pay,extra};
-    showToast('✓ Shift updated — '+fmt(pay));
-    cancelEdit(job);
-  } else {
-    shifts.push({date,type,hrs,pay,extra});
-    showToast('✓ Shift added — '+fmt(pay));
-    document.getElementById(job+'-hrs').value='';
-    document.getElementById(job+'-extra').value='';
-  }
-  shifts.sort((a,b)=>a.date.localeCompare(b.date));
-  setShifts(job,p.start,shifts);
-  renderAll();
-};
-
-window.delShift = (job,periodStart,idx) => {
-  if(!confirm('Remove this shift?')) return;
-  const shifts=getShifts(job,periodStart);
-  shifts.splice(idx,1);
-  setShifts(job,periodStart,shifts);
-  renderAll();
-  showToast('Shift removed');
-};
-
-window.togglePeriod = (id,chevId) => {
-  const el=document.getElementById(id);
-  const chev=document.getElementById(chevId);
-  el.classList.toggle('open');
-  chev.classList.toggle('open');
-};
-
-window.filterHistory = (f,btn) => {
-  histFilter=f;
-  document.querySelectorAll('.hist-tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  renderHistory();
-};
-
-window.switchJob = (job) => {
-  activeJob=job;
-  document.getElementById('log-lhsc').style.display=job==='lhsc'?'block':'none';
-  document.getElementById('log-craig').style.display=job==='craig'?'block':'none';
-  document.getElementById('jt-lhsc').className='jt-btn lhsc'+(job==='lhsc'?' active':'');
-  document.getElementById('jt-craig').className='jt-btn craig'+(job==='craig'?' active':'');
-};
-
-window.showPage = (name) => {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  document.getElementById('btn-'+name).classList.add('active');
-  renderAll();
-};
-
-window.saveSettings = () => {
-  settings.lhsc.rate=parseFloat(document.getElementById('s-lhsc-rate').value)||27.01;
-  settings.lhsc.anchor=document.getElementById('s-lhsc-anchor').value;
-  settings.lhsc.offset=parseInt(document.getElementById('s-lhsc-offset').value)||6;
-  settings.craig.rate=parseFloat(document.getElementById('s-craig-rate').value)||26.00;
-  settings.craig.anchor=document.getElementById('s-craig-anchor').value;
-  settings.craig.offset=parseInt(document.getElementById('s-craig-offset').value)||5;
-  settings.pension=parseFloat(document.getElementById('s-pension').value)||0;
-  settings.union=parseFloat(document.getElementById('s-union').value)||0;
-  settings.aftertax=parseFloat(document.getElementById('s-aftertax').value)||0;
-  localStorage.setItem(SET_KEY,JSON.stringify(settings));
-  renderAll();
-  showToast('✓ Settings saved');
-};
-
-function showToast(msg){
+function toast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────────────────
 document.getElementById('lhsc-date').value=ds(new Date());
 document.getElementById('craig-date').value=ds(new Date());
+renderSettingsPage();
 renderAll();
 </script>
 </body>
 </html>
-
-<script>
-// ── INVESTMENT MODULE (appended) ──────────────────────────────────────────────
-// Patch bottom nav to add Invest tab
-document.querySelector('.bottom-nav').innerHTML = `
-  <button class="bnav-btn active" id="btn-home" onclick="showPage('home')"><span class="bi">🏠</span>Home</button>
-  <button class="bnav-btn" id="btn-log" onclick="showPage('log')"><span class="bi">⏱</span>Log</button>
-  <button class="bnav-btn" id="btn-history" onclick="showPage('history')"><span class="bi">📋</span>History</button>
-  <button class="bnav-btn" id="btn-invest" onclick="showPage('invest')"><span class="bi">📈</span>Invest</button>
-  <button class="bnav-btn" id="btn-settings" onclick="showPage('settings')"><span class="bi">⚙️</span>Setup</button>`;
-
-// Remove stats nav btn and page (replaced by invest in nav, stats still accessible via history)
-// Add invest page
-const investPage = document.createElement('div');
-investPage.className = 'page';
-investPage.id = 'page-invest';
-investPage.innerHTML = `
-<style>
-.inv-hero{background:linear-gradient(135deg,#0d1f12 0%,#0a1a22 100%);border:1px solid #1a3a2a;border-radius:16px;padding:20px;margin-bottom:12px;position:relative;overflow:hidden}
-.inv-hero-glow{position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:var(--green);opacity:0.08;filter:blur(30px)}
-.inv-hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--green);margin-bottom:6px}
-.inv-hero-amount{font-size:38px;font-weight:800;color:var(--green);letter-spacing:-1.5px;font-variant-numeric:tabular-nums;line-height:1}
-.inv-hero-sub{font-size:12px;color:var(--sub);margin-top:6px}
-.inv-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
-.inv-stat{background:rgba(0,0,0,0.3);border-radius:10px;padding:11px;text-align:center}
-.inv-stat-label{font-size:10px;color:var(--sub);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em}
-.inv-stat-val{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
-
-.inv-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
-.inv-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);margin-bottom:14px}
-
-.inv-setting-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
-.inv-setting-row:last-child{border-bottom:none}
-.inv-setting-label{font-size:13px;font-weight:500}
-.inv-setting-sub{font-size:11px;color:var(--sub);margin-top:2px}
-.inv-input{height:40px;width:110px;border:1.5px solid var(--border);border-radius:10px;background:var(--s2);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:0 10px;outline:none;text-align:right}
-.inv-input:focus{border-color:var(--green)}
-.inv-pct-group{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.inv-pct-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--s2);color:var(--sub);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.15s}
-.inv-pct-btn.active{background:#0d3326;border-color:var(--green);color:var(--green)}
-
-.growth-table{width:100%;border-collapse:collapse;font-size:13px}
-.growth-table th{text-align:left;color:var(--sub);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.07em;padding:8px 0;border-bottom:1px solid var(--border)}
-.growth-table th:not(:first-child){text-align:right}
-.growth-table td{padding:10px 0;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
-.growth-table td:not(:first-child){text-align:right;font-weight:600}
-.growth-table tr:last-child td{border-bottom:none}
-.gt-year{font-size:12px;font-weight:700;color:var(--sub)}
-.gt-low{color:#8ab4f8}.gt-mid{color:var(--green)}.gt-high{color:var(--amber)}
-
-.rate-tabs{display:flex;gap:6px;margin-bottom:14px}
-.rate-tab{flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border);background:var(--s2);color:var(--sub);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;transition:all 0.15s}
-.rate-tab.active{background:#0a2e22;border-color:var(--green);color:var(--green)}
-
-.compound-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:8px 0}
-.cb-principal{background:var(--lhsc);height:100%}
-.cb-interest{background:var(--green);height:100%}
-.cb-legend{display:flex;gap:16px;margin-top:6px}
-.cb-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub)}
-.cb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-.milestone-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
-.milestone-row:last-child{border-bottom:none}
-.ms-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
-.ms-info{flex:1}
-.ms-label{font-size:13px;font-weight:600}
-.ms-sub{font-size:11px;color:var(--sub);margin-top:2px}
-.ms-val{font-size:14px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
-
-.inv-apply-btn{width:100%;height:46px;border-radius:12px;border:none;background:var(--green);color:#000;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-top:12px}
-</style>
-
-<div class="inv-hero">
-  <div class="inv-hero-glow"></div>
-  <div class="inv-hero-label">💰 Investment fund this period</div>
-  <div class="inv-hero-amount" id="inv-amount">$0.00</div>
-  <div class="inv-hero-sub" id="inv-pct-label">20% of gross earnings</div>
-  <div class="inv-stats-row">
-    <div class="inv-stat"><div class="inv-stat-label">Saved so far</div><div class="inv-stat-val" id="inv-total-saved" style="color:var(--green)">$0</div></div>
-    <div class="inv-stat"><div class="inv-stat-label">Periods invested</div><div class="inv-stat-val" id="inv-periods-count">0</div></div>
-  </div>
-</div>
-
-<div class="inv-card">
-  <div class="inv-card-title">Investment settings</div>
-  <div class="inv-setting-row">
-    <div><div class="inv-setting-label">% of earnings to invest</div><div class="inv-setting-sub">Applied to combined gross pay</div></div>
-    <input class="inv-input" type="number" id="inv-pct" value="20" min="1" max="100" step="1" oninput="renderInvest()">
-  </div>
-  <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-    <div class="inv-setting-label" style="font-size:13px;margin-bottom:8px">Quick select</div>
-    <div class="inv-pct-group">
-      <button class="inv-pct-btn" onclick="setInvPct(10,this)">10%</button>
-      <button class="inv-pct-btn active" onclick="setInvPct(20,this)">20%</button>
-      <button class="inv-pct-btn" onclick="setInvPct(25,this)">25%</button>
-      <button class="inv-pct-btn" onclick="setInvPct(30,this)">30%</button>
-      <button class="inv-pct-btn" onclick="setInvPct(50,this)">50%</button>
-    </div>
-  </div>
-  <div class="inv-setting-row">
-    <div><div class="inv-setting-label">Monthly contribution</div><div class="inv-setting-sub">Or set a fixed amount</div></div>
-    <input class="inv-input" type="number" id="inv-monthly" placeholder="Auto" step="10" oninput="renderInvest()">
-  </div>
-  <div class="inv-setting-row">
-    <div><div class="inv-setting-label">Current savings ($)</div><div class="inv-setting-sub">Existing amount already invested</div></div>
-    <input class="inv-input" type="number" id="inv-existing" value="0" step="100" oninput="renderInvest()">
-  </div>
-</div>
-
-<div class="inv-card">
-  <div class="inv-card-title">Growth scenario</div>
-  <div class="rate-tabs">
-    <button class="rate-tab" onclick="setScenario('conservative',this)">Conservative<br><span style="font-size:10px;font-weight:400">4-5% / yr</span></button>
-    <button class="rate-tab active" onclick="setScenario('moderate',this)">Moderate<br><span style="font-size:10px;font-weight:400">7-8% / yr</span></button>
-    <button class="rate-tab" onclick="setScenario('aggressive',this)">Aggressive<br><span style="font-size:10px;font-weight:400">10-12% / yr</span></button>
-  </div>
-  <div class="inv-setting-row">
-    <div><div class="inv-setting-label">Annual return rate</div><div class="inv-setting-sub">Customize your expected return</div></div>
-    <div style="display:flex;align-items:center;gap:4px">
-      <input class="inv-input" type="number" id="inv-rate" value="7" step="0.5" min="0" max="50" oninput="renderInvest()" style="width:80px">
-      <span style="color:var(--sub);font-size:13px">%</span>
-    </div>
-  </div>
-</div>
-
-<div class="inv-card">
-  <div class="inv-card-title">Projected growth</div>
-  <table class="growth-table">
-    <thead><tr><th>Time</th><th class="gt-low">Low (4%)</th><th class="gt-mid">Target</th><th class="gt-high">High (12%)</th></tr></thead>
-    <tbody id="growth-tbody"></tbody>
-  </table>
-</div>
-
-<div class="inv-card">
-  <div class="inv-card-title">Compound breakdown at target rate</div>
-  <div id="compound-visual"></div>
-</div>
-
-<div class="inv-card">
-  <div class="inv-card-title">Milestones</div>
-  <div id="milestones"></div>
-</div>
-`;
-document.body.insertBefore(investPage, document.querySelector('.bottom-nav'));
-
-// ── Investment state ──────────────────────────────────────────────────────────
-const INV_KEY = 'pht_invest_v1';
-let invSettings = JSON.parse(localStorage.getItem(INV_KEY)||'null') || {pct:20, rate:7, scenario:'moderate', existing:0, monthly:null};
-let currentScenario = invSettings.scenario || 'moderate';
-
-function saveInv(){localStorage.setItem(INV_KEY,JSON.stringify(invSettings));}
-
-window.setInvPct = (pct, btn) => {
-  document.getElementById('inv-pct').value = pct;
-  document.querySelectorAll('.inv-pct-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  invSettings.pct = pct; saveInv(); renderInvest();
-};
-
-window.setScenario = (s, btn) => {
-  currentScenario = s; invSettings.scenario = s;
-  document.querySelectorAll('.rate-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const rates = {conservative:4.5, moderate:7, aggressive:11};
-  document.getElementById('inv-rate').value = rates[s];
-  invSettings.rate = rates[s]; saveInv(); renderInvest();
-};
-
-function calcFV(principal, monthly, rate, years){
-  const r = rate/100/12;
-  if(r === 0) return principal + monthly*years*12;
-  return principal*Math.pow(1+r,years*12) + monthly*(Math.pow(1+r,years*12)-1)/r;
-}
-
-window.renderInvest = () => {
-  // Get current gross
-  const lp=getCurrentPeriod('lhsc'), cp=getCurrentPeriod('craig');
-  const ls=summarize(getShifts('lhsc',lp.start)), cs=summarize(getShifts('craig',cp.start));
-  const gross = ls.gross + cs.gross;
-
-  const pct = parseFloat(document.getElementById('inv-pct').value)||20;
-  const rate = parseFloat(document.getElementById('inv-rate').value)||7;
-  const existing = parseFloat(document.getElementById('inv-existing').value)||0;
-  const manualMonthly = parseFloat(document.getElementById('inv-monthly').value)||null;
-
-  const periodInv = gross * (pct/100);
-  const monthlyInv = manualMonthly || (periodInv * 26 / 12);
-
-  invSettings.pct=pct; invSettings.rate=rate; invSettings.existing=existing; invSettings.monthly=manualMonthly;
-  saveInv();
-
-  // Hero
-  document.getElementById('inv-amount').textContent = '$'+periodInv.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
-  document.getElementById('inv-pct-label').textContent = `${pct}% of $${gross.toFixed(2)} gross · ~$${monthlyInv.toFixed(0)}/mo`;
-
-  // Count all periods
-  let totalSaved = existing;
-  let periodsCount = 0;
-  ['lhsc','craig'].forEach(job=>{
-    Object.keys(allShifts).filter(k=>k.startsWith(job+'_')).forEach(k=>{
-      const s=summarize(allShifts[k]);
-      totalSaved += s.gross*(pct/100);
-      periodsCount++;
-    });
-  });
-  document.getElementById('inv-total-saved').textContent='$'+Math.round(totalSaved).toLocaleString('en-CA');
-  document.getElementById('inv-periods-count').textContent=periodsCount;
-
-  // Growth table
-  const timepoints = [
-    {label:'6 months',years:0.5},
-    {label:'1 year',years:1},
-    {label:'2 years',years:2},
-    {label:'3 years',years:3},
-    {label:'5 years',years:5},
-    {label:'10 years',years:10},
-    {label:'15 years',years:15},
-    {label:'20 years',years:20},
-    {label:'25 years',years:25},
-    {label:'30 years',years:30},
-  ];
-
-  const tbody = document.getElementById('growth-tbody');
-  tbody.innerHTML = timepoints.map(tp=>{
-    const low  = calcFV(existing, monthlyInv, 4,   tp.years);
-    const mid  = calcFV(existing, monthlyInv, rate, tp.years);
-    const high = calcFV(existing, monthlyInv, 12,  tp.years);
-    const fmtBig = n => {
-      if(n>=1000000) return '$'+(n/1000000).toFixed(2)+'M';
-      if(n>=1000) return '$'+Math.round(n/1000)+'K';
-      return '$'+Math.round(n);
-    };
-    return`<tr>
-      <td class="gt-year">${tp.label}</td>
-      <td class="gt-low">${fmtBig(low)}</td>
-      <td class="gt-mid">${fmtBig(mid)}</td>
-      <td class="gt-high">${fmtBig(high)}</td>
-    </tr>`;
-  }).join('');
-
-  // Compound visual at 5, 10, 20 years
-  const compEl = document.getElementById('compound-visual');
-  const checkpoints = [1,5,10,20];
-  compEl.innerHTML = checkpoints.map(y=>{
-    const fv = calcFV(existing, monthlyInv, rate, y);
-    const contributed = existing + monthlyInv*y*12;
-    const interest = Math.max(0, fv - contributed);
-    const intPct = fv>0?Math.round(interest/fv*100):0;
-    const prinPct = 100-intPct;
-    const fmtBig = n=>{if(n>=1000000)return'$'+(n/1000000).toFixed(1)+'M';if(n>=1000)return'$'+Math.round(n/1000)+'K';return'$'+Math.round(n);};
-    return`<div style="margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
-        <span style="color:var(--sub);font-weight:600">${y} year${y>1?'s':''}</span>
-        <span style="color:var(--green);font-weight:700">${fmtBig(fv)}</span>
-      </div>
-      <div class="compound-bar">
-        <div class="cb-principal" style="width:${prinPct}%"></div>
-        <div class="cb-interest" style="width:${intPct}%"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:3px">
-        <span>You put in: ${fmtBig(contributed)}</span>
-        <span style="color:var(--green)">Interest: ${fmtBig(interest)} (${intPct}%)</span>
-      </div>
-    </div>`;
-  }).join('');
-
-  // Milestones
-  const milestones=[
-    {icon:'🌱',label:'First $1,000',target:1000},
-    {icon:'🎯',label:'$5,000 saved',target:5000},
-    {icon:'🏆',label:'$10,000 saved',target:10000},
-    {icon:'🚀',label:'$25,000 saved',target:25000},
-    {icon:'💎',label:'$50,000 saved',target:50000},
-    {icon:'🏠',label:'$100K milestone',target:100000},
-    {icon:'👑',label:'$250K milestone',target:250000},
-  ];
-
-  const msEl = document.getElementById('milestones');
-  msEl.innerHTML = milestones.map(m=>{
-    let yearsNeeded = null;
-    for(let y=0.1;y<=50;y+=0.1){
-      if(calcFV(existing,monthlyInv,rate,y)>=m.target){yearsNeeded=y;break;}
-    }
-    const current = calcFV(existing,monthlyInv,rate,0.001);
-    const done = current >= m.target;
-    const sub = done ? 'Already reached! 🎉' : yearsNeeded ? `~${yearsNeeded<1?(yearsNeeded*12).toFixed(0)+' months':(yearsNeeded).toFixed(1)+' years'} at ${rate}% return` : 'Beyond 50 year projection';
-    return`<div class="milestone-row">
-      <span class="ms-icon">${m.icon}</span>
-      <div class="ms-info">
-        <div class="ms-label">${m.label}</div>
-        <div class="ms-sub">${sub}</div>
-      </div>
-      <div class="ms-val">$${(m.target>=1000?Math.round(m.target/1000)+'K':m.target)}</div>
-    </div>`;
-  }).join('');
-};
-
-// Patch showPage to include invest
-const _origShowPage = window.showPage;
-window.showPage = (name) => {
-  _origShowPage(name);
-  if(name==='invest') renderInvest();
-};
-
-// Init invest settings from storage
-if(invSettings.rate) document.getElementById('inv-rate').value = invSettings.rate;
-if(invSettings.pct) document.getElementById('inv-pct').value = invSettings.pct;
-if(invSettings.existing) document.getElementById('inv-existing').value = invSettings.existing;
-</script>
